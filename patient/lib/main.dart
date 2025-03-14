@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:patient/presentation/screens/splash_screen.dart';
-import 'package:patient/presentation/screens/auth/auth_screen.dart';
+import 'package:patient/presentation/splash_screen.dart';
+import 'package:patient/presentation/auth/auth_screen.dart';
 
 void main() {
   runApp(const MyApp());

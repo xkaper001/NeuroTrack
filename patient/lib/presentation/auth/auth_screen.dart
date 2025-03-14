@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../widgets/google_signin_button.dart';
-import '../../widgets/welcome_header.dart';
+import '../widgets/google_signin_button.dart';
+import '../widgets/welcome_header.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
