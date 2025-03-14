@@ -38,6 +38,33 @@ class AppTheme {
         secondary: secondaryColor,
         background: backgroundColor,
       ),
+      filledButtonTheme: FilledButtonThemeData(
+          style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(primaryColor),
+        minimumSize: WidgetStatePropertyAll(Size(double.infinity, 56)),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+        ),
+      )),
+      dropdownMenuTheme: DropdownMenuThemeData(
+        textStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.grey.shade600,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade600),
+          ),
+          fillColor: Colors.yellowAccent,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade600),
+          ),
+        ),
+      ),
     );
   }
 }
