@@ -31,7 +31,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
         child: FilledButton(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
@@ -42,14 +42,14 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               }
             }
           },
-          child: Text(
+          child: const Text(
             'Continue',
             style: TextStyle(fontSize: 16),
           ),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -58,23 +58,23 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 74),
-                Text(
+                const SizedBox(height: 74),
+                const Text(
                   "Personal Details",
                   style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.w600,
                       color: Colors.black),
                 ),
-                SizedBox(height: 4),
-                Text(
+                const SizedBox(height: 4),
+                const Text(
                   'Tell us a bit about yourself',
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: Color.fromRGBO(92, 93, 103, 1)),
                 ),
-                SizedBox(height: 42),
+                const SizedBox(height: 42),
                 _buildDropDown(
                   headerText: '  Assessment is for?',
                   initialSelection: 'Myself',
@@ -84,11 +84,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     });
                   },
                   dropdownItems: [
-                    DropdownMenuEntry(
+                    const DropdownMenuEntry(
                       label: 'Myself',
                       value: 'Myself',
                     ),
-                    DropdownMenuEntry(
+                    const DropdownMenuEntry(
                       label: 'For my child',
                       value: 'For my child',
                     ),
@@ -168,9 +168,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             headerText: '  Gender',
             initialSelection: 'Male',
             dropdownItems: [
-              DropdownMenuEntry(value: 'Male', label: 'Male'),
-              DropdownMenuEntry(value: 'Female', label: 'Female'),
-              DropdownMenuEntry(value: 'Others', label: 'Others'),
+              const DropdownMenuEntry(value: 'Male', label: 'Male'),
+              const DropdownMenuEntry(value: 'Female', label: 'Female'),
+              const DropdownMenuEntry(value: 'Others', label: 'Others'),
             ],
             onSelected: (value) {
               setState(() {
@@ -182,7 +182,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
+            const Text(
               '  Country',
               style: TextStyle(
                   color: Colors.black,
@@ -215,9 +215,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       const SizedBox(width: 10),
                       Text(
                         selectedCountry?.name ?? 'Select Country',
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: Colors.grey.shade600,
@@ -231,7 +231,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 padding: const EdgeInsets.only(left: 12, top: 8),
                 child: Text(
                   _validationErrors['country']!,
-                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
                 ),
               ),
           ],
@@ -285,9 +285,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             headerText: '  Patient Gender',
             initialSelection: 'Male',
             dropdownItems: [
-              DropdownMenuEntry(value: 'Male', label: 'Male'),
-              DropdownMenuEntry(value: 'Female', label: 'Female'),
-              DropdownMenuEntry(value: 'Others', label: 'Others'),
+              const DropdownMenuEntry(value: 'Male', label: 'Male'),
+              const DropdownMenuEntry(value: 'Female', label: 'Female'),
+              const DropdownMenuEntry(value: 'Others', label: 'Others'),
             ],
             onSelected: (value) {
               setState(() {
@@ -299,8 +299,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             headerText: '  Relation with patient',
             initialSelection: 'Guardian',
             dropdownItems: [
-              DropdownMenuEntry(value: 'Guardian', label: 'Guardian'),
-              DropdownMenuEntry(value: 'Other', label: 'Other'),
+              const DropdownMenuEntry(value: 'Guardian', label: 'Guardian'),
+              const DropdownMenuEntry(value: 'Other', label: 'Other'),
             ],
             onSelected: (value) {
               setState(() {
@@ -331,7 +331,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
+            const Text(
               '  Country',
               style: TextStyle(fontSize: 14),
             ),
@@ -361,9 +361,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       const SizedBox(width: 10),
                       Text(
                         selectedCountry?.name ?? 'Select Country',
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Icon(Icons.keyboard_arrow_down_rounded,
                           color: Colors.grey.shade600),
                       const SizedBox(width: 14),
@@ -375,7 +375,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 padding: const EdgeInsets.only(left: 12, top: 8),
                 child: Text(
                   _validationErrors['country']!,
-                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
                 ),
               ),
           ],
@@ -398,7 +398,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       children: [
         Text(
           '  $label',
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.black,
               fontSize: 12,
               height: 1.25,
@@ -423,7 +423,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.grey.shade600)),
-            errorStyle: TextStyle(color: Colors.red),
+            errorStyle: const TextStyle(color: Colors.red),
           ),
         ),
       ],
@@ -442,7 +442,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       children: [
         Text(
           headerText,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 12,
             height: 1.25,

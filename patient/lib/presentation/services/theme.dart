@@ -33,15 +33,15 @@ class AppTheme {
           color: subtitleColor,
         ),
       ),
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: primaryColor,
         secondary: secondaryColor,
-        background: backgroundColor,
+        surface: backgroundColor,
       ),
       filledButtonTheme: FilledButtonThemeData(
           style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(primaryColor),
-        minimumSize: WidgetStatePropertyAll(Size(double.infinity, 56)),
+        backgroundColor: const WidgetStatePropertyAll(primaryColor),
+        minimumSize: const WidgetStatePropertyAll(Size(double.infinity, 56)),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
