@@ -1,6 +1,6 @@
--- Create the patient table 
+-- Create the patient table
 CREATE TABLE patient (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY REFERENCES auth.users(id),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     patient_name TEXT NOT NULL,
     age INT2,
@@ -11,14 +11,14 @@ CREATE TABLE patient (
     guardian_relation TEXT,
     autism_level INT2,
     onboarded_on TIMESTAMPTZ,
-    therapist_id UUID,
+    therapist_id UUID REFERENCES auth.users(id),
     gender TEXT,
     country TEXT
 );
 
 -- Create the therapist table
 CREATE TABLE therapist (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY REFERENCES auth.users(id),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     name TEXT NOT NULL,
     email TEXT NOT NULL,
@@ -46,8 +46,8 @@ CREATE TABLE session (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     timestamp TIMESTAMPTZ NOT NULL,
-    therapist_id UUID,
-    patient_id UUID,
+    therapist_id UUID REFERENCES therapist(id), -- Fixed to reference therapist.id
+    patient_id UUID REFERENCES patient(id),     -- Fixed to reference patient.id
     mode INT2,
     duration INT4,
     name TEXT
@@ -58,7 +58,7 @@ CREATE TABLE therapy_goal (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     performed_on TIMESTAMPTZ,
-    therapist_id UUID,
+    therapist_id UUID REFERENCES therapist(id), -- Fixed to reference therapist.id
     therapy_mode INT2,
     duration INT4,
     therapy_type INT2,
@@ -66,29 +66,11 @@ CREATE TABLE therapy_goal (
     observations JSONB,
     regressions JSONB,
     activities JSONB,
-    patient_id UUID,
+    patient_id UUID REFERENCES patient(id),     -- Fixed to reference patient.id
     therapy_date INT8
 );
 
--- Add foreign key constraints
-ALTER TABLE patient
-ADD CONSTRAINT fk_therapist
-FOREIGN KEY (therapist_id) REFERENCES therapist(id);
-
-ALTER TABLE session
-ADD CONSTRAINT fk_therapist
-FOREIGN KEY (therapist_id) REFERENCES therapist(id),
-ADD CONSTRAINT fk_patient
-FOREIGN KEY (patient_id) REFERENCES patient(id);
-
-ALTER TABLE therapy_goal
-ADD CONSTRAINT fk_therapist
-FOREIGN KEY (therapist_id) REFERENCES therapist(id),
-ADD CONSTRAINT fk_patient
-FOREIGN KEY (patient_id) REFERENCES patient(id);
-
-
--- indexes on foreign keys for better performance
+-- Indexes on foreign keys for better performance
 CREATE INDEX idx_patient_therapist_id ON patient(therapist_id);
 CREATE INDEX idx_session_therapist_id ON session(therapist_id);
 CREATE INDEX idx_session_patient_id ON session(patient_id);
