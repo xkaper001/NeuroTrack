@@ -4,6 +4,5 @@ CREATE TABLE public.adult_assessments (
   name TEXT NOT NULL,
   description TEXT,
   category TEXT,
-  pdf_url TEXT NOT NULL,
-  is_adult BOOLEAN DEFAULT true
+  questions JSONB NOT NULL
 );
