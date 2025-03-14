@@ -20,6 +20,7 @@ dependencies:
   flutter_native_splash: ^2.3.6
   font_awesome_flutter: ^10.6.0
   google_sign_in: ^6.1.6
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   flutter_test:
