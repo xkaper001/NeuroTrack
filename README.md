@@ -18,6 +18,69 @@ Neurotrack aims to:
 - Flutter (for both the Apps)
 - Supabase (for backend)
 
+# Neurotrack Project Setup
+
+This README provides instructions for setting up and running the Neurotrack patient and therapist apps, as well as configuring Supabase.
+
+## Patient App Setup
+
+Navigate to the patient app directory:
+
+```sh
+cd patient
+```
+
+Install dependencies:
+
+```sh
+flutter pub get
+```
+
+Run the app:
+
+```sh
+flutter run
+```
+
+## Therapist App Setup
+
+Navigate to the therapist app directory:
+
+```sh
+cd therapist
+```
+
+Install dependencies:
+
+```sh
+flutter pub get
+```
+
+Run the app:
+
+```sh
+flutter run
+```
+
+## Supabase Setup
+
+1. Sign up or log in to Supabase at [Supabase](https://supabase.com)
+2. Create a new project in the Supabase dashboard
+3. Once the project is created, go to **Project Settings**
+4. In the **API** section, you will find:
+   - **Project URL (SUPABASE_URL)**
+   - **Project API Keys (SUPABASE_KEY - use the anon public key)**
+5. Create a `.env` file in the root directory of both patient and therapist apps:
+
+```sh
+SUPABASE_URL=your_project_url
+SUPABASE_KEY=your_anon_key
+```
+
+6. Replace `your_project_url` and `your_anon_key` with the values from step 4.
+
+
+
 ## Patient Application Flow
 
 ### Authentication & Onboarding
@@ -118,3 +181,4 @@ Neurotrack aims to:
 - Track long-term development across key domains
 - Visualize improvement trends
 - Document milestone achievements            
+
