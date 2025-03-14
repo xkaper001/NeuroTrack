@@ -274,9 +274,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (age == null || age <= 0) {
               return 'Please enter a valid age';
             }
-            if (age >= 18) {
-              return 'For patients 18 and older, use adult form';
-            }
             return null;
           },
         ),
