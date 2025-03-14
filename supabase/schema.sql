@@ -11,7 +11,7 @@ CREATE TABLE patient (
     guardian_relation TEXT,
     autism_level INT2,
     onboarded_on TIMESTAMPTZ,
-    therapist_id UUID REFERENCES auth.users(id),
+    therapist_id UUID REFERENCES therapist(id),
     gender TEXT,
     country TEXT
 );
