@@ -24,7 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
     ),
     OnboardingContent(
       image: 'assets/illustration1.png',
-      title: 'Therapy Goals',
+      title: 'Therapy Goals ',
       description: 'Personalized Daily Activities, Tracked Effortlessly!',
     ),
     OnboardingContent(
