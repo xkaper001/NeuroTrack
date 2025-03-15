@@ -47,6 +47,7 @@ dependencies:
   flutter_native_splash: ^2.3.6
   google_sign_in: ^6.1.6
   carousel_slider: ^4.0.0
+  flutter_dotenv: ^5.2.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +69,7 @@ flutter:
 
   assets:
     - assets/
+    - .env
 
  # To add assets to your application, add an assets section, like this:
   # assets:
