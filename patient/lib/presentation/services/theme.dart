@@ -49,9 +49,9 @@ class AppTheme {
         ),
       )),
       dropdownMenuTheme: DropdownMenuThemeData(
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 16,
-          color: Colors.grey.shade600,
+          color: Colors.black,
         ),
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: OutlineInputBorder(

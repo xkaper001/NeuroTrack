@@ -20,6 +20,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   // Child Variables
   final childNameController = TextEditingController();
   final childAgeController = TextEditingController();
+  final guardianPhoneController = TextEditingController();
+  Country? selectedChildCountry;
   String selectedRelation = '';
   String? selectedChildGender = '';
 
@@ -131,7 +133,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           fieldName: 'adultPhone',
           label: 'Phone Number',
           controller: phoneController,
-          hintText: '+91 12345 67890',
+          hintText: '+91 12345-67890',
           keyboardType: TextInputType.phone,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -150,7 +152,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           fieldName: 'adultAge',
           label: 'Age',
           controller: adultAgeController,
-          hintText: '20',
+          hintText: 'Your Age',
           keyboardType: TextInputType.number,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -166,7 +168,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         const SizedBox(height: 20),
         _buildDropDown(
             headerText: '  Gender',
-            initialSelection: 'Male',
             dropdownItems: [
               const DropdownMenuEntry(value: 'Male', label: 'Male'),
               const DropdownMenuEntry(value: 'Female', label: 'Female'),
@@ -214,8 +215,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     children: [
                       const SizedBox(width: 10),
                       Text(
-                        selectedCountry?.name ?? 'Select Country',
-                        style: const TextStyle(fontSize: 15),
+                        selectedCountry?.name ?? '',
+                        style: const TextStyle(fontSize: 15, color: Colors.black,),
                       ),
                       const Spacer(),
                       Icon(
@@ -264,7 +265,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           fieldName: 'childAge',
           label: 'Patient Age',
           controller: childAgeController,
-          hintText: '10',
+          hintText: 'Patient\'s Age',
           keyboardType: TextInputType.number,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -274,27 +275,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (age == null || age <= 0) {
               return 'Please enter a valid age';
             }
-            return null;
+            return null;  
           },
-        ),
+        ), 
         const SizedBox(height: 20),
-        _buildDropDown(
-            headerText: '  Patient Gender',
-            initialSelection: 'Male',
-            dropdownItems: [
-              const DropdownMenuEntry(value: 'Male', label: 'Male'),
-              const DropdownMenuEntry(value: 'Female', label: 'Female'),
-              const DropdownMenuEntry(value: 'Others', label: 'Others'),
-            ],
-            onSelected: (value) {
-              setState(() {
-                selectedChildGender = value;
-              });
-            }),
-        const SizedBox(height: 20),
-        _buildDropDown(
+            _buildDropDown(
             headerText: '  Relation with patient',
-            initialSelection: 'Guardian',
+            initialSelection: '',
             dropdownItems: [
               const DropdownMenuEntry(value: 'Guardian', label: 'Guardian'),
               const DropdownMenuEntry(value: 'Other', label: 'Other'),
@@ -305,11 +292,25 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               });
             }),
         const SizedBox(height: 20),
+        _buildDropDown(
+            headerText: '  Patient Gender',
+            dropdownItems: [
+              const DropdownMenuEntry(value: 'Male', label: 'Male'),
+              const DropdownMenuEntry(value: 'Female', label: 'Female'),
+              const DropdownMenuEntry(value: 'Others', label: 'Others'),
+            ],
+            onSelected: (value) {
+              setState(() {
+                selectedChildGender = value;
+              });
+            }),
+        
+        const SizedBox(height: 20),
         _buildTextField(
           fieldName: 'guardianPhone',
           label: 'Your phone number',
-          controller: phoneController,
-          hintText: '+91 12345 67890',
+          controller: guardianPhoneController,
+          hintText: '+91 12345-67890',
           keyboardType: TextInputType.phone,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -330,7 +331,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           children: [
             const Text(
               '  Country',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, color: Colors.black),
             ),
             const SizedBox(height: 4),
             GestureDetector(
@@ -338,7 +339,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       context: context,
                       onSelect: (value) {
                         setState(() {
-                          selectedCountry = value;
+                          selectedChildCountry = value;
                           _validationErrors.remove('country');
                         });
                       },
@@ -357,7 +358,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     children: [
                       const SizedBox(width: 10),
                       Text(
-                        selectedCountry?.name ?? 'Select Country',
+                        selectedChildCountry?.name ?? '',
                         style: const TextStyle(fontSize: 15),
                       ),
                       const Spacer(),
