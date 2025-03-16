@@ -18,7 +18,7 @@ class PatientScheduleAppointmentEntity with PatientScheduleAppointmentEntityMapp
   @MappableField(key: 'therapist_id')
   final String therapistId;
 
-  @MappableField(key: 'model')
+  @MappableField(key: 'mode')
   final int mode;
 
   @MappableField(key: 'duration')

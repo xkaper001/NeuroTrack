@@ -4,9 +4,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/entities/entities.dart';
 import '../core/repository/repository.dart';
 
-class PatientRepositoryImpl implements PatientRepository {
+class SupabasePatientRepository implements PatientRepository {
 
-  PatientRepositoryImpl({
+  SupabasePatientRepository({
     required SupabaseClient supabaseClient
   }) : _supabaseClient = supabaseClient;
 

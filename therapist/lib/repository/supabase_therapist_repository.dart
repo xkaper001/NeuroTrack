@@ -8,9 +8,9 @@ import 'package:therapist/core/entities/therapist_entities/therapist_upcoming_ap
 import '../core/repository/repository.dart';
 import '../core/result/result.dart';
 
-class TherapistRepositoryImpl implements TherapistRepository {
+class SupabaseTherapistRepository implements TherapistRepository {
 
-  TherapistRepositoryImpl({
+  SupabaseTherapistRepository({
     required SupabaseClient supabaseClient,
   }) : _supabaseClient = supabaseClient;
 
