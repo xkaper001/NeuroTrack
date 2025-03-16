@@ -12,22 +12,31 @@ class PersonalInfoEntity with PersonalInfoEntityMappable {
 
   @MappableField(key: 'patient_id')
   final String patientId;
+
   @MappableField(key: 'patient_name')
   final String patientName;
+
   @MappableField(key: 'age')
   final int age;
+
   @MappableField(key: 'is_adult')
   final bool isAdult;
+
   @MappableField(key: 'phone_no')
   final String phoneNo;
+
   @MappableField(key: 'email')
   final String email;
+
   @MappableField(key: 'guardian_name')
   final String? guardianName;
+
   @MappableField(key: 'guardian_relation')
   final String? guardianRelation;
+
   @MappableField(key: 'gender')
   final String? gender;
+  
   @MappableField(key: 'country')
   final String? country;
 
