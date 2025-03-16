@@ -37,8 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon:
-                ImageIcon(AssetImage('assets/Calendar.png')),
+            icon: ImageIcon(AssetImage('assets/Calendar.png')),
             label: 'Calendar',
           ),
           BottomNavigationBarItem(
@@ -50,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.grey,
         showSelectedLabels: false,
         showUnselectedLabels: false,
+        backgroundColor: Color(0xFFFAFAFA), // Changed bottom nav color
       ),
-
     );
   }
 }
