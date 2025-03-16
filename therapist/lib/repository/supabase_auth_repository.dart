@@ -1,8 +1,15 @@
-import 'package:therapist/core/repository/auth_repository.dart';
+import 'package:therapist/core/repository/auth/auth_repository.dart';
+import 'package:therapist/core/result/action_result.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
-  // The repository class will implement the abstract repository class.
-  // Future<T> SignInWithGoogle() {
-  //  supabaase.auth.signInWithGoogle();
-  // }
+  @override
+  Future<ActionResult> signInWithGoogle() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ActionResult> storePersonalInfo() {
+    throw UnimplementedError();
+  }
+
 }
