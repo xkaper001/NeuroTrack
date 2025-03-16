@@ -15,34 +15,23 @@ class SupabaseAuthRepository implements AuthRepository {
   Future<ActionResult> signInWithGoogle() {
     throw UnimplementedError();
   }
-
-  // Method to store patient's personal information in Supbase [PATIENT] table
+  
   @override
   Future<ActionResult> storePersonalInfo(PersonalInfoEntity personalInfoEntity) async {
-    final response = await _supabaseClient.from('patient').insert({
-      'id': _supabaseClient.auth.currentUser?.id,
-      'patient_name': personalInfoEntity.patientName,
-      'age': personalInfoEntity.age,
-      'is_adult': personalInfoEntity.isAdult,
-      'phone_no': personalInfoEntity.phoneNo,
-      'email': personalInfoEntity.email,
-      'guardian_name': personalInfoEntity.guardianName,
-      'guardian_relation': personalInfoEntity.guardianRelation,
-      'gender': personalInfoEntity.gender,
-      'country': personalInfoEntity.country,
-    });
+    try {
+      await _supabaseClient.from('patient')
+        .insert(personalInfoEntity.toMap());
 
-    if (response.error != null) {
+      return ActionResultSuccess(
+        data: 'Personal information stored successfully',
+        statusCode: 200
+      );
+    } catch(e) {
       return ActionResultFailure(
-        errorMessage: response.error?.message ?? 'Some error occurred while storing personal information',
-        statusCode: response.error?.code,
+        errorMessage: e.toString(),
+        statusCode: 400,
       );
     }
-
-    return ActionResultSuccess(
-      data: 'Personal information stored successfully',
-      statusCode: 200
-    );
   }
 
 }

@@ -3,6 +3,9 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'therapist_schedule_model.mapper.dart';
 
+// Model class to store therapist's scheduled appointment information which will be used on UI
+// This class can have toEntity and fromEntity methods to convert to and from entity
+
 @MappableClass()
 class TherapistScheduleModel with TherapistScheduleModelMappable {
 

@@ -1,2 +1,2 @@
 export './auth/auth.dart';
-export './therapy/therapy.dart';
+export './patient/patient.dart';

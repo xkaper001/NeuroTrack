@@ -20,26 +20,30 @@ class PersonalInfoEntityMapper extends ClassMapperBase<PersonalInfoEntity> {
   @override
   final String id = 'PersonalInfoEntity';
 
+  static String _$patientId(PersonalInfoEntity v) => v.patientId;
+  static const Field<PersonalInfoEntity, String> _f$patientId =
+      Field('patientId', _$patientId, key: r'patient_id');
   static String _$patientName(PersonalInfoEntity v) => v.patientName;
   static const Field<PersonalInfoEntity, String> _f$patientName =
-      Field('patientName', _$patientName);
+      Field('patientName', _$patientName, key: r'patient_name');
   static int _$age(PersonalInfoEntity v) => v.age;
   static const Field<PersonalInfoEntity, int> _f$age = Field('age', _$age);
   static bool _$isAdult(PersonalInfoEntity v) => v.isAdult;
   static const Field<PersonalInfoEntity, bool> _f$isAdult =
-      Field('isAdult', _$isAdult);
+      Field('isAdult', _$isAdult, key: r'is_adult');
   static String _$phoneNo(PersonalInfoEntity v) => v.phoneNo;
   static const Field<PersonalInfoEntity, String> _f$phoneNo =
-      Field('phoneNo', _$phoneNo);
+      Field('phoneNo', _$phoneNo, key: r'phone_no');
   static String _$email(PersonalInfoEntity v) => v.email;
   static const Field<PersonalInfoEntity, String> _f$email =
       Field('email', _$email);
   static String? _$guardianName(PersonalInfoEntity v) => v.guardianName;
   static const Field<PersonalInfoEntity, String> _f$guardianName =
-      Field('guardianName', _$guardianName, opt: true);
+      Field('guardianName', _$guardianName, key: r'guardian_name', opt: true);
   static String? _$guardianRelation(PersonalInfoEntity v) => v.guardianRelation;
-  static const Field<PersonalInfoEntity, String> _f$guardianRelation =
-      Field('guardianRelation', _$guardianRelation, opt: true);
+  static const Field<PersonalInfoEntity, String> _f$guardianRelation = Field(
+      'guardianRelation', _$guardianRelation,
+      key: r'guardian_relation', opt: true);
   static String? _$country(PersonalInfoEntity v) => v.country;
   static const Field<PersonalInfoEntity, String> _f$country =
       Field('country', _$country, opt: true);
@@ -49,6 +53,7 @@ class PersonalInfoEntityMapper extends ClassMapperBase<PersonalInfoEntity> {
 
   @override
   final MappableFields<PersonalInfoEntity> fields = const {
+    #patientId: _f$patientId,
     #patientName: _f$patientName,
     #age: _f$age,
     #isAdult: _f$isAdult,
@@ -62,6 +67,7 @@ class PersonalInfoEntityMapper extends ClassMapperBase<PersonalInfoEntity> {
 
   static PersonalInfoEntity _instantiate(DecodingData data) {
     return PersonalInfoEntity(
+        patientId: data.dec(_f$patientId),
         patientName: data.dec(_f$patientName),
         age: data.dec(_f$age),
         isAdult: data.dec(_f$isAdult),
@@ -129,7 +135,8 @@ extension PersonalInfoEntityValueCopy<$R, $Out>
 abstract class PersonalInfoEntityCopyWith<$R, $In extends PersonalInfoEntity,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {String? patientName,
+      {String? patientId,
+      String? patientName,
       int? age,
       bool? isAdult,
       String? phoneNo,
@@ -152,7 +159,8 @@ class _PersonalInfoEntityCopyWithImpl<$R, $Out>
       PersonalInfoEntityMapper.ensureInitialized();
   @override
   $R call(
-          {String? patientName,
+          {String? patientId,
+          String? patientName,
           int? age,
           bool? isAdult,
           String? phoneNo,
@@ -162,6 +170,7 @@ class _PersonalInfoEntityCopyWithImpl<$R, $Out>
           Object? country = $none,
           Object? gender = $none}) =>
       $apply(FieldCopyWithData({
+        if (patientId != null) #patientId: patientId,
         if (patientName != null) #patientName: patientName,
         if (age != null) #age: age,
         if (isAdult != null) #isAdult: isAdult,
@@ -174,6 +183,7 @@ class _PersonalInfoEntityCopyWithImpl<$R, $Out>
       }));
   @override
   PersonalInfoEntity $make(CopyWithData data) => PersonalInfoEntity(
+      patientId: data.get(#patientId, or: $value.patientId),
       patientName: data.get(#patientName, or: $value.patientName),
       age: data.get(#age, or: $value.age),
       isAdult: data.get(#isAdult, or: $value.isAdult),

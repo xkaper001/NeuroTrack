@@ -2,6 +2,9 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'therapist_schedule_entity.mapper.dart';
 
+// Entity class resembling therapist's scheduled appointment information with Supabase [SESSION] table
+// This class can have toModel and fromModel methods to convert to and from model
+
 @MappableClass()
 class TherapistScheduleEntity with TherapistScheduleEntityMappable {
 
@@ -44,6 +47,4 @@ class TherapistScheduleEntity with TherapistScheduleEntityMappable {
     this.duration,
     this.therapyName,
   });
-
-
 }

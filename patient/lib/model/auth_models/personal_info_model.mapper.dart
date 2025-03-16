@@ -20,6 +20,9 @@ class PersonalInfoModelMapper extends ClassMapperBase<PersonalInfoModel> {
   @override
   final String id = 'PersonalInfoModel';
 
+  static String _$patientId(PersonalInfoModel v) => v.patientId;
+  static const Field<PersonalInfoModel, String> _f$patientId =
+      Field('patientId', _$patientId);
   static String _$patientName(PersonalInfoModel v) => v.patientName;
   static const Field<PersonalInfoModel, String> _f$patientName =
       Field('patientName', _$patientName);
@@ -49,6 +52,7 @@ class PersonalInfoModelMapper extends ClassMapperBase<PersonalInfoModel> {
 
   @override
   final MappableFields<PersonalInfoModel> fields = const {
+    #patientId: _f$patientId,
     #patientName: _f$patientName,
     #age: _f$age,
     #isAdult: _f$isAdult,
@@ -62,6 +66,7 @@ class PersonalInfoModelMapper extends ClassMapperBase<PersonalInfoModel> {
 
   static PersonalInfoModel _instantiate(DecodingData data) {
     return PersonalInfoModel(
+        patientId: data.dec(_f$patientId),
         patientName: data.dec(_f$patientName),
         age: data.dec(_f$age),
         isAdult: data.dec(_f$isAdult),
@@ -129,7 +134,8 @@ extension PersonalInfoModelValueCopy<$R, $Out>
 abstract class PersonalInfoModelCopyWith<$R, $In extends PersonalInfoModel,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
   $R call(
-      {String? patientName,
+      {String? patientId,
+      String? patientName,
       int? age,
       bool? isAdult,
       String? phoneNo,
@@ -152,7 +158,8 @@ class _PersonalInfoModelCopyWithImpl<$R, $Out>
       PersonalInfoModelMapper.ensureInitialized();
   @override
   $R call(
-          {String? patientName,
+          {String? patientId,
+          String? patientName,
           int? age,
           bool? isAdult,
           String? phoneNo,
@@ -162,6 +169,7 @@ class _PersonalInfoModelCopyWithImpl<$R, $Out>
           String? country,
           String? gender}) =>
       $apply(FieldCopyWithData({
+        if (patientId != null) #patientId: patientId,
         if (patientName != null) #patientName: patientName,
         if (age != null) #age: age,
         if (isAdult != null) #isAdult: isAdult,
@@ -174,6 +182,7 @@ class _PersonalInfoModelCopyWithImpl<$R, $Out>
       }));
   @override
   PersonalInfoModel $make(CopyWithData data) => PersonalInfoModel(
+      patientId: data.get(#patientId, or: $value.patientId),
       patientName: data.get(#patientName, or: $value.patientName),
       age: data.get(#age, or: $value.age),
       isAdult: data.get(#isAdult, or: $value.isAdult),

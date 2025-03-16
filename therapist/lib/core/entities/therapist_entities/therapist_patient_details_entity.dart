@@ -2,6 +2,9 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'therapist_patient_details_entity.mapper.dart';
 
+// Entity class that resembles therapist's patient details information with Supabase [PATIENTS] table
+// This class can have toModel and fromModel methods to convert to and from model
+
 @MappableClass()
 class TherapistPatientDetailsEntity with TherapistPatientDetailsEntityMappable {
 

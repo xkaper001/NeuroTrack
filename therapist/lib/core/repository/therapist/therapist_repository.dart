@@ -2,22 +2,78 @@ import 'package:therapist/core/result/action_result.dart';
 
 abstract interface class TherapistRepository {
 
-  // All the patients of the therapist
+  /// Retrieves the list of patients associated with the therapist from the `patients` table.
+  /// 
+  /// This method fetches the list of patients associated with the therapist from the `patients` table
+  /// using Supabase.
+  /// 
+  /// - **Returns:**
+  /// - A [Future] of [ActionResult], which can either be:
+  /// - [ActionResultSuccess] with a list of [TherapistPatientDetailsEntity] and status code `200` if the
+  /// patients are successfully fetched.
+  /// - [ActionResultFailure] with an error message and status code `400` if an exception occurs.
+  ///
+  /// - **Exceptions:**
+  /// - If an error occurs while fetching the records, it is caught and returned as a failure.
 
   Future<ActionResult> getTherapistPatients();
 
-  // Get Therapist Schedule as per date
+  /// Retrieves the schedule of the therapist from the `session` table.
+  /// 
+  /// This method fetches the schedule of the therapist from the
+  /// `session` table using Supabase.
+  /// 
+  /// - **Returns:**
+  /// - A [Future] of [ActionResult], which can either be:
+  /// - [ActionResultSuccess] with a list of [TherapistScheduleEntity] and status code `200` if the
+  /// schedule is successfully fetched.
+  /// - [ActionResultFailure] with an error message and status code `400` if an exception occurs.
+  /// 
+  /// - **Exceptions:**
+  /// - If an error occurs while fetching the records, it is caught and returned as a failure.
 
   Future<ActionResult> getTherapistSchedule();
 
-  // Get Therapist Upcoming Appointments
+  /// Retrieves the upcoming appointments of the therapist from the `session` table.
+  /// 
+  /// This method fetches the upcoming appointments of the therapist from the
+  /// `session` table using Supabase.
+  /// 
+  /// - **Returns:**
+  /// - A [Future] of [ActionResult], which can either be:
+  /// - [ActionResultSuccess] with a list of [TherapistUpcomingAppointmentEntity] and status code `200` if the
+  /// appointments are successfully fetched.
+  /// - [ActionResultFailure] with an error message and status code `400` if an exception occurs.
+  /// 
+  /// - **Exceptions:**
+  /// - If an error occurs while fetching the records, it is caught and returned as a failure.
+  
   Future<ActionResult> getTherapistUpcomingAppointments();
 
-  // Change the status of the appointment
+  /// Changes the status of an appointment in the `session` table.
+  /// 
+  /// This method takes an `appointmentId` and a `status` as parameters and updates the status
+  /// of the appointment in the `session` table using Supabase.
+  /// 
+  /// - **Parameters:**
+  ///  - `appointmentId` : The unique identifier of the appointment.
+  /// - `status` : The new status of the appointment.
+  /// 
+  /// - **Returns:**
+  /// - A [Future] of [ActionResult], which can either be:
+  /// - [ActionResultSuccess] with a success message and status code `200` if the appointment
+  /// status is successfully updated.
+  /// - [ActionResultFailure] with an error message and status code `400` if an exception occurs.
+  /// 
+  /// - **Exceptions:**
+  /// - If an error occurs while updating the record, it is caught and returned as a failure.
 
   Future<ActionResult> changeAppointmentStatus(String appointmentId, String status);
 
-  // Get the total number of patients
+
+  // TODO: Add the following methods
+  // HOW do we differentiate between therapy and session?
+  
   Future<ActionResult> getTotalPatients();
 
   // Get the total number of Sessions
