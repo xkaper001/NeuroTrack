@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/presentation/services/theme.dart';
 import 'package:patient/provider/assessment_provider.dart';
 import 'package:provider/provider.dart';
 
 class AssessmentScreen extends StatefulWidget {
-  const AssessmentScreen({super.key});
+  final String assessmentId;
+  const AssessmentScreen({super.key, required this.assessmentId});
 
   @override
   AssessmentScreenState createState() => AssessmentScreenState();
 }
 
 class AssessmentScreenState extends State<AssessmentScreen> {
-  final String assessmentId = dotenv.env['Austim_Spectrum_Assement_Id']!;
-
   @override
   void initState() {
     super.initState();
     Provider.of<AssessmentProvider>(context, listen: false)
-        .fetchAssessmentById(assessmentId);
+        .fetchAssessmentById(widget.assessmentId);
   }
 
   @override

@@ -6,7 +6,9 @@ class AssessmentProvider with ChangeNotifier {
       SupabaseAssessmentsRepository();
   Map<String, dynamic>? _assessment;
   Map<int, String?> _selectedAnswers = {};
+  String? _assessmentId;
 
+  String? get assessmentId => _assessmentId;
   Map<String, dynamic>? get assessment => _assessment;
   Map<int, String?> get selectedAnswers => _selectedAnswers;
 
@@ -42,4 +44,10 @@ class AssessmentProvider with ChangeNotifier {
 
   //implement the submitAssessment method to submit the assessment when the submitted_assessment table is created
   Future<void> submitAssessment() async {}
+
+  //setAssessmentId method can be used to set the assessment id
+  void setAssessmentId(String id) {
+    _assessmentId = id;
+    notifyListeners();
+  }
 }
