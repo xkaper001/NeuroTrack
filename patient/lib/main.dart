@@ -14,6 +14,7 @@ Future<void> main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.white,
@@ -23,6 +24,7 @@ Future<void> main() async {
     ),
   );
 
+
   runApp(
     MultiProvider(
       providers: [
@@ -31,6 +33,7 @@ Future<void> main() async {
       child: const MyApp(),
     ),
   );
+
 }
 
 class MyApp extends StatelessWidget {
