@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:therapist/core/theme/theme.dart';
 import 'provider/home_provider.dart';
+import 'provider/therapist_provider.dart';
 import 'presentation/home/home_screen.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => TherapistDataProvider()),
       ],
       child: MaterialApp(
         title: 'Therapist App',

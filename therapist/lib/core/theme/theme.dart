@@ -38,7 +38,7 @@ class AppTheme {
         ),
         menuStyle: const MenuStyle(
           backgroundColor:
-              WidgetStatePropertyAll(Color.fromARGB(255, 247, 201, 255)),
+              WidgetStatePropertyAll(Color.fromARGB(255, 252, 246, 253)),
         ),
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: OutlineInputBorder(

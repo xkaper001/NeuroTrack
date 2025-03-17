@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/common/chips_input_field.dart';
+import '../../provider/therapist_provider.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   const PersonalDetailsScreen({super.key});
@@ -21,90 +23,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var regulatoryBodyDropdownItems = [
-      const DropdownMenuEntry(
-        value: 'Rehabilitation Council of India',
-        label: 'Rehabilitation Council of India',
-      ),
-      const DropdownMenuEntry(
-        value: 'All India Occupational Therapists Association',
-        label: 'All India Occupational Therapists Association',
-      ),
-      const DropdownMenuEntry(
-        value: 'All India Speech and Hearing Association',
-        label: 'All India Speech and Hearing Association',
-      ),
-      const DropdownMenuEntry(
-        value: 'Indian Association of Physiotherapists',
-        label: 'Indian Association of Physiotherapists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Indian Association of Occupational Therapists',
-        label: 'Indian Association of Occupational Therapists',
-      ),
-    ];
-    var specializationDropdownItems = [
-      const DropdownMenuEntry(
-        value: 'Neurologists',
-        label: 'Neurologists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Psychiatrists',
-        label: 'Psychiatrists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Neuropsychiatrists',
-        label: 'Neuropsychiatrists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Clinical Psychologists',
-        label: 'Clinical Psychologists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Pediatric Psychiatrists',
-        label: 'Pediatric Psychiatrists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Pediatric Neurologists',
-        label: 'Pediatric Neurologists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Developmental and Behavioral Pediatricians',
-        label: 'Developmental and Behavioral Pediatricians',
-      ),
-      const DropdownMenuEntry(
-        value: 'Counseling Psychologists',
-        label: 'Counseling Psychologists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Cognitive Behavioral Therapists',
-        label: 'Cognitive Behavioral Therapists',
-      ),
-      const DropdownMenuEntry(
-        value: 'Psychopharmacologists',
-        label: 'Psychopharmacologists',
-      ),
-    ];
-    const therapies = [
-      'Speech Therapy',
-      'Physical Therapy',
-      'Occupational Therapy',
-      'Cognitive Behavioral Therapy',
-      'Psychotherapy',
-      'Music Therapy',
-      'Art Therapy',
-      'Dance Therapy',
-      'Play Therapy',
-      'Recreational Therapy',
-      'Nutritional Therapy',
-      'Behavioral Therapy',
-      'Family Therapy',
-      'Group Therapy',
-      'Individual Therapy',
-      'Couples Therapy',
-      'Dialectical Behavior Therapy',
-      'Vocational Therap'
-    ];
+    // Use the therapist provider
+    final therapistDataProvider = Provider.of<TherapistDataProvider>(context);
+
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
@@ -195,12 +116,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 const SizedBox(height: 20),
                 _buildDropDown(
                   headerText: '  Specialization',
-                  dropdownItems: specializationDropdownItems,
+                  dropdownItems: therapistDataProvider.specializationDropdownItems,
                 ),
                 const SizedBox(height: 20),
                 _buildDropDown(
                   headerText: '  Regulatory Body',
-                  dropdownItems: regulatoryBodyDropdownItems,
+                  dropdownItems: therapistDataProvider.regulatoryBodyDropdownItems,
                 ),
                 const SizedBox(height: 20),
                 _buildTextField(
@@ -218,7 +139,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 const SizedBox(height: 20),
                 OfferedTherapiesChoiceChipInput(
                   initialSelected: const [],
-                  therapies: therapies,
+                  therapies: therapistDataProvider.therapies,
                   onSelectedTherapiesChanged: (value) {
                     setState(() {
                       selectedTherapies = value;
@@ -306,7 +227,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             color: Colors.grey.shade600,
           ),
           expandedInsets: const EdgeInsets.all(0),
-          dropdownMenuEntries: dropdownItems,
+                    dropdownMenuEntries: dropdownItems,
         ),
       ],
     );
