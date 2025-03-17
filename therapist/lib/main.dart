@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:therapist/core/theme/theme.dart';
 import 'provider/home_provider.dart';
 import 'presentation/home/home_screen.dart';
 
@@ -8,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -20,11 +21,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Therapist App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          scaffoldBackgroundColor: const Color(0xFFF8F8F8),
-          fontFamily: 'Poppins',
-        ),
+        theme: AppTheme.lightTheme(),
         home: const HomeScreen(),
       ),
     );
