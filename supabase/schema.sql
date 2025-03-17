@@ -50,7 +50,8 @@ CREATE TABLE session (
     patient_id UUID REFERENCES patient(id),     -- Fixed to reference patient.id
     mode INT2,
     duration INT4,
-    name TEXT
+    name TEXT,
+    status TEXT NOT NULL CHECK (status IN ('accepted', 'declined', 'pending')) DEFAULT 'pending'
 );
 
 -- Create the therapy_goal table
