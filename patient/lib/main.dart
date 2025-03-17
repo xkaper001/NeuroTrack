@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:patient/presentation/services/theme.dart';
+import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/splash_screen.dart';
 import 'package:patient/provider/assessment_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,6 @@ Future<void> main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-
 
   runApp(
     MultiProvider(
