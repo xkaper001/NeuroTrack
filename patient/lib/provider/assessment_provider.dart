@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/repository/supabase_assessments_repository.dart';
 
 class AssessmentProvider with ChangeNotifier {
@@ -12,9 +13,12 @@ class AssessmentProvider with ChangeNotifier {
   Map<String, dynamic>? get assessment => _assessment;
   Map<int, String?> get selectedAnswers => _selectedAnswers;
 
-  Future<void> fetchAssessmentById(String id) async {
+  Future<void> fetchAssessmentBySelectedId() async {
     try {
-      final assessments = await _repository.fetchAssessmentById(id);
+      //for testing purposes, the assessment id is hardcoded in the .env file and directly passing it if the assessment id is not set
+      //otherwise, the assessment id is fetched from the assessment id set by the user
+      final assessments = await _repository.fetchAssessmentById(
+          _assessmentId ?? dotenv.env['Austim_Spectrum_Assement_Id']!);
       if (assessments.isNotEmpty) {
         _assessment = assessments.first;
         _selectedAnswers = {
