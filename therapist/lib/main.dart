@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:therapist/core/theme/theme.dart';
-import 'provider/home_provider.dart';
-import 'provider/therapist_provider.dart';
-import 'presentation/home/home_screen.dart';
+import './presentation/auth/auth_screen.dart';
+// import './presentation/home/home_screen.dart';
+import './provider/auth_provider.dart';
+import './provider/home_provider.dart';
+import './provider/therapist_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => TherapistDataProvider())
+      ],
+      child: TherapyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+class TherapyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => TherapistDataProvider()),
-      ],
-      child: MaterialApp(
-        title: 'Therapist App',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(),
-        home: const HomeScreen(),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AuthScreen(),
     );
   }
 }
