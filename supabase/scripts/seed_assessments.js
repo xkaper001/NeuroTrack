@@ -14,7 +14,7 @@ const assessments = [
     name: "Autism Spectrum Quotient (AQ-10)",
     description: "A brief screening tool for autism spectrum traits in adults aged 16 and over. It consists of 10 statements to assess behaviors and preferences.",
     category: "Autism Assessment",
-    cuttoff_score: 6,
+    cutoff_score: 6,
     questions: [
       {
         question_id: generateRandomUUID(),
@@ -122,7 +122,7 @@ const assessments = [
     name: "Camouflaging Autistic Traits Questionnaire (CAT-Q)",
     description: "A 25-item self-report measure designed to assess camouflaging strategies in individuals aged 16 years and older.",
     category: "Autism Assessment",
-    cuttoff_score: 100,
+    cutoff_score: 100,
     questions: [
       {
         question_id: generateRandomUUID(),
