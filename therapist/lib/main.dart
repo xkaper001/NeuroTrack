@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:therapist/core/theme/theme.dart';
-import 'provider/home_provider.dart';
-import 'provider/therapist_provider.dart';
-import 'presentation/home/home_screen.dart';
+import 'package:flutter/services.dart';
+import '../../presentation/home/home_screen.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => TherapistDataProvider()),
-      ],
-      child: MaterialApp(
-        title: 'Therapist App',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(),
-        home: const HomeScreen(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Therapist Dashboard',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[50],
+        fontFamily: 'SF Pro Display',
       ),
+      home: const HomeScreen(),
     );
   }
 }
