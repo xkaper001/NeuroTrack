@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 
-import type { 
+import { 
   AssessmentDTO,
   QuestionDTO,
   OptionDTO,
