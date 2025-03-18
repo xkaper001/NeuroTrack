@@ -1,5 +1,3 @@
-import exp from "node:constants";
-
 // DTO for an assessment
 export interface AssessmentDTO {
   name: string;
