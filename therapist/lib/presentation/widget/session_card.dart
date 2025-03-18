@@ -27,48 +27,58 @@ class SessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isCancelled = status == 'Cancelled';
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isCancelled ? const Color(0xFFFEE8E8) : const Color(0xFFF0FFF0),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: isCancelled ? const Color(0xFFFFF0F0) : const Color(0xFFF0FFF0),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isCancelled ? Colors.red.shade100 : Colors.green.shade100,
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=${patientId.hashCode % 70}'),
+                backgroundImage: NetworkImage(
+                    'https://i.pravatar.cc/150?img=${patientId.hashCode % 70}'),
               ),
               const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    patientName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      patientName,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '$patientId\n$phone',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
+                    const SizedBox(height: 2),
+                    Text(
+                      '$patientId',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      phone,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -91,10 +101,11 @@ class SessionCard extends StatelessWidget {
                       therapyName,
                       style: const TextStyle(
                         fontSize: 14,
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
                       'Therapy Mode',
                       style: TextStyle(
@@ -107,6 +118,7 @@ class SessionCard extends StatelessWidget {
                       therapyMode,
                       style: const TextStyle(
                         fontSize: 14,
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -129,10 +141,11 @@ class SessionCard extends StatelessWidget {
                       time,
                       style: const TextStyle(
                         fontSize: 14,
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
                       'Duration',
                       style: TextStyle(
@@ -145,6 +158,7 @@ class SessionCard extends StatelessWidget {
                       duration,
                       style: const TextStyle(
                         fontSize: 14,
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -159,8 +173,8 @@ class SessionCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   cancelMessage!,
-                  style: const TextStyle(
-                    color: Colors.red,
+                  style: TextStyle(
+                    color: Colors.red[400],
                     fontSize: 12,
                   ),
                   textAlign: TextAlign.center,

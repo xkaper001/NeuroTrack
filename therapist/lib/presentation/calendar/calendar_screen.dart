@@ -9,10 +9,10 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  int _selectedDay = 11; // Today (11th)
+  int _selectedDay = 11;
   String _selectedFilter = 'All';
 
-  final List<String> _days = ['9', '10', '11', '12', '13', '14'];
+  final List<String> _days = ['8', '9', '10', '11', '12', '13', '14'];
   final List<String> _filters = ['All', 'Pending', 'Cancelled', 'Completed'];
   final Map<String, int> _filterCounts = {
     'All': 12,
@@ -52,17 +52,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       'time': '04: 30 PM',
       'duration': '1 hour 20 mins',
       'status': 'Cancelled',
-      'cancelMessage': 'Mohammed Mohsin won\'t be attending the session today',
-    },
-    {
-      'patientName': 'Patient Name',
-      'patientId': '#1243384',
-      'phone': '+91 1234567890',
-      'therapyName': 'Therapy Name',
-      'therapyMode': 'Offline',
-      'time': '10: 30 AM',
-      'duration': '1 hour 20 mins',
-      'status': 'Completed',
+      'cancelMessage':
+          'Mohammed Mohsin won\'t be able to attend the session today',
     },
   ];
 
@@ -79,6 +70,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -88,11 +80,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
               const Text(
                 'Your Schedule',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               // Day selector
               SizedBox(
                 height: 50,
@@ -109,20 +101,19 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         });
                       },
                       child: Container(
-                        width: 60,
+                        width: 50,
                         margin: const EdgeInsets.only(right: 8),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? const Color(0xFFD580FF)
                               : Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
+                          border: Border.all(
+                            color: isSelected
+                                ? Colors.transparent
+                                : Colors.grey.shade300,
+                            width: 1,
+                          ),
                         ),
                         child: Center(
                           child: Text(
@@ -143,13 +134,33 @@ class _CalendarScreenState extends State<CalendarScreen> {
               const SizedBox(height: 16),
               // Filter tabs
               SizedBox(
-                height: 40,
+                height: 36,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _filters.length,
                   itemBuilder: (context, index) {
                     final filter = _filters[index];
                     final isSelected = filter == _selectedFilter;
+
+                    Color bgColor;
+                    Color textColor;
+
+                    if (isSelected) {
+                      if (filter == 'All' || filter == 'Completed') {
+                        bgColor = const Color(0xFFD580FF);
+                        textColor = Colors.white;
+                      } else if (filter == 'Cancelled') {
+                        bgColor = Colors.white;
+                        textColor = Colors.grey.shade600;
+                      } else {
+                        bgColor = Colors.white;
+                        textColor = Colors.grey.shade600;
+                      }
+                    } else {
+                      bgColor = Colors.white;
+                      textColor = Colors.grey.shade600;
+                    }
+
                     return GestureDetector(
                       onTap: () {
                         setState(() {
@@ -157,31 +168,26 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         });
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         margin: const EdgeInsets.only(right: 8),
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? filter == 'All'
-                                  ? const Color(0xFFD580FF)
-                                  : filter == 'Pending'
-                                      ? Colors.grey[300]
-                                      : filter == 'Cancelled'
-                                          ? Colors.grey[300]
-                                          : const Color(0xFFD580FF)
-                              : Colors.grey[300],
+                          color: bgColor,
                           borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected && filter == 'All'
+                                ? Colors.transparent
+                                : Colors.grey.shade300,
+                            width: 1,
+                          ),
                         ),
                         child: Center(
                           child: Text(
                             '${filter} (${_filterCounts[filter]})',
                             style: TextStyle(
-                              color: isSelected
-                                  ? (filter == 'All' || filter == 'Completed'
-                                      ? Colors.white
-                                      : Colors.black)
-                                  : Colors.black,
+                              color: textColor,
+                              fontSize: 13,
                               fontWeight: isSelected
-                                  ? FontWeight.bold
+                                  ? FontWeight.w500
                                   : FontWeight.normal,
                             ),
                           ),
@@ -191,7 +197,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               // Session cards
               Expanded(
                 child: ListView.builder(
@@ -214,24 +220,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     );
                   },
                 ),
-              ),
-              // Can't take this session button
-              if (_selectedFilter == 'Pending')
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'Can\'t take this session?',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              ),      
             ],
           ),
         ),
