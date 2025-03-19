@@ -27,17 +27,17 @@ class CalendarScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Custom date timeline to match the design exactly
               SizedBox(
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 7, // Show 7 days
+                  itemCount: 30, // Show 30 days (1st to 30th)
                   itemBuilder: (context, index) {
-                    // Calculate the date for this index
-                    final date =
-                        DateTime.now().subtract(Duration(days: 3 - index));
-                    final isToday = index == 3; // 4th item (index 3) is today
+                    final now = DateTime.now();
+                    final firstDayOfMonth = DateTime(now.year, now.month, 1);
+                    final date = firstDayOfMonth.add(Duration(days: index));
+
+                    final isToday = date.day == now.day;
                     final isSelected =
                         date.day == sessionProvider.selectedDate.day;
 
@@ -118,20 +118,38 @@ class CalendarScreen extends StatelessWidget {
                   itemCount: sessionProvider.filteredSessions.length,
                   itemBuilder: (context, index) {
                     final session = sessionProvider.filteredSessions[index];
+
+                    // Assign card color based on session status
+                    Color cardColor;
+                    if (session['status'] == 'Completed') {
+                      cardColor = Colors.lightGreen.shade400;
+                    } else if (session['status'] == 'Cancelled') {
+                      cardColor = Colors.red.shade400;
+                    } else {
+                      cardColor = Colors.white; // Default color
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child: SessionCard(
-                        patientName: session['patientName'],
-                        patientId: session['patientId'],
-                        phone: session['phone'],
-                        therapyName: session['therapyName'],
-                        therapyMode: session['therapyMode'],
-                        time: session['time'],
-                        duration: session['duration'],
-                        status: session['status'],
-                        cancelMessage: session.containsKey('cancelMessage')
-                            ? session['cancelMessage']
-                            : null,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: cardColor,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: SessionCard(
+                          patientName: session['patientName'],
+                          patientId: session['patientId'],
+                          phone: session['phone'],
+                          therapyName: session['therapyName'],
+                          therapyMode: session['therapyMode'],
+                          time: session['time'],
+                          duration: session['duration'],
+                          status: session['status'],
+                          cancelMessage: session.containsKey('cancelMessage')
+                              ? session['cancelMessage']
+                              : null,
+                        ),
                       ),
                     );
                   },
@@ -151,7 +169,7 @@ class CalendarScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFD580FF) : Colors.white, 
+          color: isSelected ? const Color(0xFFD580FF) : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? Colors.transparent : Colors.grey.shade300,
