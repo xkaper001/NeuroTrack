@@ -5,6 +5,7 @@ import './presentation/auth/auth_screen.dart';
 import './provider/auth_provider.dart';
 import './provider/home_provider.dart';
 import './provider/therapist_provider.dart';
+import './presentation/widget/splash_screen.dart';
 
 void main() {
   runApp(
@@ -24,7 +25,7 @@ class TherapyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthScreen(),
+      home: SplashScreen(),
     );
   }
 }
