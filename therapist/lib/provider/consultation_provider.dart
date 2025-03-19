@@ -29,51 +29,44 @@ class ConsultationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+// In ConsultationProvider.dart
+Future<void> updateRequestStatus(
+  String requestId, 
+  String status, 
+  DateTime? scheduledTime, 
+  {String? notes}
+) async {
+  _isLoading = true;
+  notifyListeners();
 
-  Future<void> updateRequestStatus(
-    String requestId, 
-    String status, 
-    DateTime? scheduledTime, 
-    {String? notes}
-  ) async {
-    _isLoading = true;
-    notifyListeners();
+  try {
+    // Update the request in the service
+    await _consultationService.updateRequestStatus(
+      requestId: requestId,
+      status: status,
+      scheduledTime: scheduledTime,
+      notes: notes,
+    );
 
-    try {
-      // In a real implementation, this would call the service to update the status
-      // For now I have just updated the local state
-      final index = _consultationRequests.indexWhere((req) => req.id == requestId);
-      if (index != -1) {
-        final request = _consultationRequests[index];
-        final updatedRequest = ConsultationRequestEntity(
-          id: request.id,
-          patientId: request.patientId,
-          patientName: request.patientName,
-          therapistId: request.therapistId,
-          requestDate: request.requestDate,
-          proposedTimes: request.proposedTimes,
-          assessmentType: request.assessmentType,
-          assessmentSummary: request.assessmentSummary,
-          status: status,
-          scheduledTime: scheduledTime,
-          notes: notes ?? request.notes, assessmentId: '',
-        );
-        
-        _consultationRequests[index] = updatedRequest;
-        
-        // In production, this would be:
-        // await _consultationService.updateRequestStatus(
-        //   requestId, status, scheduledTime, notes: notes
-        // );
-      }
-    } catch (e) {
-      _error = 'Failed to update request status: ${e.toString()}';
-      debugPrint(_error);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    // Update our local data to reflect the change
+    final index = _consultationRequests.indexWhere((req) => req.id == requestId);
+    if (index != -1) {
+      final request = _consultationRequests[index];
+      _consultationRequests[index] = request.$copyWith(
+        status: status,
+        scheduledTime: scheduledTime,
+        notes: notes ?? request.notes,
+        lastUpdated: DateTime.now(),
+      );
     }
+  } catch (e) {
+    _error = 'Failed to update request status: ${e.toString()}';
+    debugPrint(_error);
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
+}
 
   // Filter methods for UI convenience
   List<ConsultationRequestEntity> get pendingRequests => 

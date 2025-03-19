@@ -1,6 +1,9 @@
-import 'package:equatable/equatable.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class ConsultationRequestEntity with EquatableMixin {
+part 'consultation_request_entity.mapper.dart';
+
+@MappableClass()
+class ConsultationRequestEntity with ConsultationRequestEntityMappable {
   final String id;
   final String patientId;
   final String patientName;
@@ -11,7 +14,7 @@ class ConsultationRequestEntity with EquatableMixin {
   final String assessmentId;
   final String assessmentType;
   final String assessmentSummary;
-  final String status; // 'pending', 'accepted', 'declined'
+  final String status;
   final DateTime? scheduledTime;
   final String? notes;
   final DateTime? lastUpdated;
@@ -33,25 +36,7 @@ class ConsultationRequestEntity with EquatableMixin {
     this.lastUpdated,
   });
 
-  @override
-  List<Object?> get props => [
-        id,
-        patientId,
-        patientName,
-        patientProfileImageUrl,
-        therapistId,
-        requestDate,
-        proposedTimes,
-        assessmentId,
-        assessmentType,
-        assessmentSummary,
-        status,
-        scheduledTime,
-        notes,
-        lastUpdated,
-      ];
-
-  ConsultationRequestEntity copyWith({
+  ConsultationRequestEntity $copyWith({
     String? id,
     String? patientId,
     String? patientName,
@@ -83,49 +68,5 @@ class ConsultationRequestEntity with EquatableMixin {
       notes: notes ?? this.notes,
       lastUpdated: lastUpdated ?? this.lastUpdated,
     );
-  }
-
-  factory ConsultationRequestEntity.fromMap(Map<String, dynamic> map) {
-    return ConsultationRequestEntity(
-      id: map['id'],
-      patientId: map['patientId'],
-      patientName: map['patientName'],
-      patientProfileImageUrl: map['patientProfileImageUrl'],
-      therapistId: map['therapistId'],
-      requestDate: DateTime.parse(map['requestDate']),
-      proposedTimes: (map['proposedTimes'] as List)
-          .map((time) => DateTime.parse(time))
-          .toList(),
-      assessmentId: map['assessmentId'],
-      assessmentType: map['assessmentType'],
-      assessmentSummary: map['assessmentSummary'],
-      status: map['status'],
-      scheduledTime: map['scheduledTime'] != null
-          ? DateTime.parse(map['scheduledTime'])
-          : null,
-      notes: map['notes'],
-      lastUpdated: map['lastUpdated'] != null
-          ? DateTime.parse(map['lastUpdated'])
-          : null,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'patientId': patientId,
-      'patientName': patientName,
-      'patientProfileImageUrl': patientProfileImageUrl,
-      'therapistId': therapistId,
-      'requestDate': requestDate.toIso8601String(),
-      'proposedTimes': proposedTimes.map((time) => time.toIso8601String()).toList(),
-      'assessmentId': assessmentId,
-      'assessmentType': assessmentType,
-      'assessmentSummary': assessmentSummary,
-      'status': status,
-      'scheduledTime': scheduledTime?.toIso8601String(),
-      'notes': notes,
-      'lastUpdated': lastUpdated?.toIso8601String(),
-    };
   }
 }
