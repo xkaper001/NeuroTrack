@@ -1,31 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:therapist/core/theme/theme.dart';
-import 'provider/home_provider.dart';
-import 'provider/therapist_provider.dart';
-import 'presentation/home/home_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:therapist/presentation/splash_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+import './presentation/auth/auth_screen.dart';
+import './provider/auth_provider.dart';
+import './provider/home_provider.dart';
+import './provider/therapist_provider.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => TherapistDataProvider())
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => TherapistDataProvider()),
-      ],
-      child: MaterialApp(
-        title: 'Therapist App',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(),
-        home: const HomeScreen(),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Therapist App',
+      theme: ThemeData.light(),
+      home: const SplashScreen(),
     );
   }
 }

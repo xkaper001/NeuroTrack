@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/google_signin_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../widgets/welcome_header.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:patient/presentation/auth/personal_details_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -15,6 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
   late Timer _timer;
+  final supabase = Supabase.instance.client;
 
   final List<OnboardingContent> _contents = [
     OnboardingContent(
@@ -24,8 +29,8 @@ class _AuthScreenState extends State<AuthScreen> {
     ),
     OnboardingContent(
       image: 'assets/illustration1.png',
-      title: 'Therapy Goals ',
-      description: 'Personalized Daily Activities, Tracked Effortlessly!',
+      title: 'Therapy Goals',
+      description: 'Set and achieve your therapy goals with ease!',
     ),
     OnboardingContent(
       image: 'assets/illustration2.png',
@@ -38,6 +43,33 @@ class _AuthScreenState extends State<AuthScreen> {
   void initState() {
     super.initState();
     _startAutoScroll();
+    supabase.auth.onAuthStateChange.listen((data) {
+      final session = supabase.auth.currentSession;
+      if (session != null && mounted) {
+        final fullName = session.user.userMetadata?['full_name'];
+        final email = session.user.email ?? 'Unknown User';
+
+        print(fullName);
+        print(email);
+        debugPrint("User authenticated, navigating to PersonalDetailsScreen");
+        debugPrint("User authenticated, Helllooooo");
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Signed in as ${fullName ?? email}'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const PersonalDetailsScreen(),
+          ),
+        );
+      }
+    });
+
   }
 
   void _startAutoScroll() {
@@ -45,7 +77,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (_currentPage < _contents.length - 1) {
         _currentPage++;
       } else {
-        _currentPage = 0; // Reset to first page when reaching the end
+        _currentPage = 0;
       }
       _pageController.animateToPage(
         _currentPage,
@@ -53,6 +85,54 @@ class _AuthScreenState extends State<AuthScreen> {
         curve: Curves.easeInOut,
       );
     });
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      final supabaseUrl = dotenv.env['SUPABASE_URL'];
+      await supabase.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: kIsWeb
+            ? "$supabaseUrl/auth/v1/callback"
+            : 'com.mycompany.cbtdiary://login-callback/',
+        authScreenLaunchMode: kIsWeb
+            ? LaunchMode.platformDefault
+            : LaunchMode.externalApplication,
+      );
+
+      // Fetch the session immediately after signing in
+      final session = await supabase.auth.currentSession;
+      debugPrint("User authenticated, navigating to PersonalDetailsScreen");
+      print(session);
+
+      if (session != null && mounted) {
+        // Extract user name from Google OAuth metadata
+        final fullName = session.user.userMetadata?['full_name'];
+        final email = session.user.email ?? 'Unknown User';
+
+        print(fullName);
+        print(email);
+        // Show toast with user's name
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Signed in as ${fullName ?? email}'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const PersonalDetailsScreen(),
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Sign in failed: $error'),
+        ));
+      }
+    }
   }
 
   @override
@@ -67,14 +147,10 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       body: Column(
         children: [
-          // Custom Welcome Header
           const WelcomeHeader(),
-
-          // Carousel and bottom content
           Expanded(
             child: Stack(
               children: [
-                // PageView for carousel
                 PageView.builder(
                   controller: _pageController,
                   itemCount: _contents.length,
@@ -87,8 +163,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     return _buildCarouselItem(_contents[index]);
                   },
                 ),
-
-                // Pagination dots
                 Positioned(
                   bottom: 120,
                   left: 0,
@@ -101,13 +175,34 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 ),
-
-                // Google Sign-in Button
-                const Positioned(
+                Positioned(
                   bottom: 40,
                   left: 0,
                   right: 0,
-                  child: GoogleSignInButton(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ElevatedButton(
+                      // onPressed: () async{
+
+                      //   await supabase.auth.
+                      //   signInWithOAuth(
+                      //     OAuthProvider.google,
+                      //     // redirectTo: kIsWeb ? null : 'com.mycompany.cbtdiary://login-callback/',
+                      //     // authScreenLaunchMode: kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication,
+                      //   );
+
+                      // },
+                      onPressed: _handleGoogleSignIn,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/google_logo.png', height: 24),
+                          const SizedBox(width: 10),
+                          const Text('Sign in with Google'),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -121,7 +216,6 @@ class _AuthScreenState extends State<AuthScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Illustration
         Image.asset(content.image, height: 200),
         const SizedBox(height: 35),
         Text(
@@ -145,7 +239,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 60), // Space for dots and button
+        const SizedBox(height: 60),
       ],
     );
   }
@@ -164,7 +258,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 }
 
-// Model class for onboarding content
 class OnboardingContent {
   final String image;
   final String title;
