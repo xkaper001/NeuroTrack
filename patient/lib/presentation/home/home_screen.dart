@@ -1,5 +1,8 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:patient/presentation/home/home_screen_slider.dart';
+import '../operations/therapy_goals.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
@@ -53,60 +56,74 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 15),
 
                           // Therapy Goals Card
-                          Card(
-                            elevation: 0,
-                            color: const Color(0xFFF9F3E3),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 30.0,
-                                  horizontal: 25.0), // Increased padding
-                              child: Row(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(
-                                        left:
-                                            25.0), // Added left margin for text
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Therapy',
-                                          style: TextStyle(
-                                            fontSize: 24, // Increased font size
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(255, 2, 2, 2),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TherapyGoalsScreen()),
+                              );
+                            },
+                            child: Card(
+                              elevation: 0,
+                              color: const Color(0xFFF9F3E3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 30.0,
+                                    horizontal: 25.0), 
+                                child: Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(
+                                          left:
+                                              25.0), 
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Therapy',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  24,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  Color.fromARGB(255, 2, 2, 2),
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          'Goals',
-                                          style: TextStyle(
-                                            fontSize: 24, // Increased font size
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(255, 2, 2, 2),
+                                          Text(
+                                            'Goals',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  24, 
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  Color.fromARGB(255, 2, 2, 2),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  Image.asset(
-                                    'assets/illustration1.png',
-                                    height: 100, // Increased image size
-                                    width:
-                                        100, // Set width to keep aspect ratio
-                                    fit: BoxFit
-                                        .cover, // Ensure the image fits well
-                                  ),
-                                ],
+                                    const Spacer(),
+                                    Image.asset(
+                                      'assets/illustration1.png',
+                                      height: 100,
+                                      width:
+                                          100,
+                                      fit: BoxFit
+                                          .cover,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(
-                              height: 15), // Increased space below the card
+                              height: 15), 
 
                           // Daily Activities Card
                           Card(
@@ -119,30 +136,29 @@ class HomeScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                 vertical: 30.0,
                                 horizontal: 25.0,
-                              ), // Adjusted padding for better spacing
+                              ), 
                               child: Row(
                                 children: [
-                                  // Move image to the left
+                                  
                                   Image.asset(
                                     'assets/illustration.png',
-                                    height: 100, // Increased image height
-                                    width: 100, // Ensures proper scaling
+                                    height: 100,
+                                    width: 100, 
                                     fit: BoxFit
-                                        .contain, // Keeps proportions correct
+                                        .contain,
                                   ),
                                   const Spacer(),
-                                  // Move text to the right
                                   const Padding(
                                     padding: EdgeInsets.only(
-                                        right: 25.0), // Adjusted right padding
+                                        right: 25.0), 
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment
-                                          .end, // Align text to the right
+                                          .end, 
                                       children: [
                                         Text(
                                           'Daily',
                                           style: TextStyle(
-                                            fontSize: 24, // Increased font size
+                                            fontSize: 24,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -150,7 +166,7 @@ class HomeScreen extends StatelessWidget {
                                         Text(
                                           'Activities',
                                           style: TextStyle(
-                                            fontSize: 24, // Increased font size
+                                            fontSize: 24,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -162,8 +178,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 15), // More spacing below
-// Increased space below the card
+                          const SizedBox(height: 15),
 
                           // Development Milestones Card
                           Card(
@@ -177,13 +192,13 @@ class HomeScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 30.0,
                                   horizontal:
-                                      25.0), // Increased vertical padding
+                                      25.0),
                               child: Row(
                                 children: [
-                                  // Move text slightly left for better balance
+                                
                                   const Padding(
                                     padding: EdgeInsets.only(
-                                        left: 25.0), // Adjusted left padding
+                                        left: 25.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -191,7 +206,7 @@ class HomeScreen extends StatelessWidget {
                                         Text(
                                           'Development',
                                           style: TextStyle(
-                                            fontSize: 24, // Increased font size
+                                            fontSize: 24, 
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -199,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                                         Text(
                                           'Milestones',
                                           style: TextStyle(
-                                            fontSize: 24, // Increased font size
+                                            fontSize: 24, 
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -208,11 +223,11 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const Spacer(),
-                                  // Increased image size for better visibility
+                                 
                                   Image.asset(
                                     'assets/illustration2.png',
-                                    height: 100, // Increased height
-                                    width: 100, // Ensures proportional scaling
+                                    height: 100, 
+                                    width: 100, 
                                     fit: BoxFit.contain,
                                   ),
                                 ],
@@ -246,14 +261,15 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavItem('assets/home.png',
-                      isSelected: true),
+                  _buildNavItem('assets/home.png', isSelected: true),
                   _buildNavItem('assets/Report.png'),
-                  _buildNavItem('assets/Calendar.png',
-                      ),
+                  _buildNavItem(
+                    'assets/Calendar.png',
+                  ),
                   _buildNavItem('assets/Notifications.png'),
-                  _buildNavItem('assets/Profile.png',
-                      ),
+                  _buildNavItem(
+                    'assets/Profile.png',
+                  ),
                 ],
               ),
             ),
