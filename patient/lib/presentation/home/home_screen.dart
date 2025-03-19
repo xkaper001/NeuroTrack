@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                       child: ListView(
                         children: [
                           // Autism Level Card
-                          const AutismLevelSlider(
+                          const LevelIndicator(
                             currentLevel: 5, // Replace with dynamic data
                             maxLevel: 18, // Replace with dynamic data
                           ),
