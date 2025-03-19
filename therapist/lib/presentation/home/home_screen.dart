@@ -230,6 +230,7 @@ class HomeContent extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             _buildConsultationRequestSection(context),
+          //  _buildConsultationRequestSection(context),
             const SizedBox(height: 24),
             const PatientCard(
               name: 'Abdul Aziz',
