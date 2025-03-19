@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  easy_date_timeline: ^1.0.4
 
   # State Management
   provider: ^6.1.2
