@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AutismLevelSlider extends StatelessWidget {
+class LevelIndicator extends StatelessWidget {
   final double currentLevel; // Dynamic value from backend
   final int maxLevel; // Maximum level for slider
 
-  const AutismLevelSlider({
+  const LevelIndicator({
     Key? key,
     required this.currentLevel,
     required this.maxLevel,

@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                           // Therapy Goals Card
                           Card(
                             elevation: 0,
-                           color: const Color(0xFFFFFFFF),
+                            color: const Color(0xFFFFFFFF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -65,8 +65,8 @@ class HomeScreen extends StatelessWidget {
                                   horizontal: 25.0), // Increased padding
                               child: Row(
                                 children: [
-                                 const  Padding(
-                                    padding:  EdgeInsets.only(
+                                  const Padding(
+                                    padding: EdgeInsets.only(
                                         left:
                                             25.0), // Added left margin for text
                                     child: Column(
@@ -111,8 +111,7 @@ class HomeScreen extends StatelessWidget {
                           // Daily Activities Card
                           Card(
                             elevation: 0,
-                          color: const Color(0xFFFEF4F0),
-
+                            color: const Color(0xFFFEF4F0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -133,13 +132,13 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   const Spacer(),
                                   // Move text to the right
-                                 const Padding(
-                                    padding:  EdgeInsets.only(
+                                  const Padding(
+                                    padding: EdgeInsets.only(
                                         right: 25.0), // Adjusted right padding
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment
                                           .end, // Align text to the right
-                                      children:  [
+                                      children: [
                                         Text(
                                           'Daily',
                                           style: TextStyle(
@@ -170,7 +169,6 @@ class HomeScreen extends StatelessWidget {
                           Card(
                             elevation: 0,
                             color: const Color(0xFFF5FAF4),
-
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(color: Colors.grey.shade200),
@@ -248,11 +246,14 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavItem(Icons.home, isSelected: true),
-                  _buildNavItem(Icons.calendar_today),
-                  _buildNavItem(Icons.date_range),
-                  _buildNavItem(Icons.notifications_none),
-                  _buildNavItem(Icons.person_outline),
+                  _buildNavItem('assets/Home.png',
+                      isSelected: true),
+                  _buildNavItem('assets/Report.png'),
+                  _buildNavItem('assets/Calendar.png',
+                      ),
+                  _buildNavItem('assets/Notifications.png'),
+                  _buildNavItem('assets/Profile.png',
+                      ),
                 ],
               ),
             ),
@@ -262,16 +263,21 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, {bool isSelected = false}) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.blue.shade50 : Colors.transparent,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        icon,
-        color: isSelected ? Colors.blue : Colors.grey,
+  Widget _buildNavItem(String assetPath, {bool isSelected = false}) {
+    return GestureDetector(
+      onTap: () {
+        // Handle navigation here
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue.shade50 : Colors.transparent,
+          shape: BoxShape.circle,
+        ),
+        child: ImageIcon(
+          AssetImage(assetPath),
+          color: isSelected ? Color(0xFFCB6CE6) : Colors.grey,
+        ),
       ),
     );
   }
