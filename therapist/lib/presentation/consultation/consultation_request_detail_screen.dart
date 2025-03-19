@@ -19,10 +19,21 @@ class ConsultationRequestDetailScreen extends StatefulWidget {
 
 class _ConsultationRequestDetailScreenState
     extends State<ConsultationRequestDetailScreen> {
-  int? selectedTimeIndex;
-  DateTime? selectedTime;
   final TextEditingController _declineReasonController = TextEditingController();
   final DateFormat dateFormat = DateFormat('EEEE, MMM d, yyyy • h:mm a');
+  bool _isAssessmentExpanded = false;
+  
+  // Mock assessment response data - in a real app this would come from the request
+  final Map<String, String> _assessmentResponses = {
+    'How often do you feel down, depressed, or hopeless?': 'Several days',
+    'Trouble falling or staying asleep?': 'More than half the days',
+    'Feeling tired or having little energy?': 'Nearly every day',
+    'Poor appetite or overeating?': 'Several days',
+    'Feeling bad about yourself?': 'More than half the days',
+    'Trouble concentrating?': 'Several days',
+    'Moving or speaking slowly?': 'Not at all',
+    'Thoughts of self-harm?': 'Not at all',
+  };
 
   @override
   void dispose() {
@@ -35,7 +46,6 @@ class _ConsultationRequestDetailScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: Text(
           'Request from ${widget.request.patientName}',
           style: const TextStyle(color: Colors.white, fontSize: 18),
@@ -56,9 +66,12 @@ class _ConsultationRequestDetailScreenState
                     const SizedBox(height: 16),
                     _buildAssessmentSection(),
                     const SizedBox(height: 16),
-                    _buildTimeSlotSection(),
+                    _buildCollapsibleAssessmentResponses(),
+                    const SizedBox(height: 16),
+                    _buildSelectedTimeSection(),
                     if (widget.request.notes != null && widget.request.notes!.isNotEmpty)
                       _buildNotesSection(),
+                    const SizedBox(height: 80), // Space for bottom buttons
                   ],
                 ),
               ),
@@ -80,7 +93,7 @@ class _ConsultationRequestDetailScreenState
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundColor: const Color(0xFF6A1B9A).withOpacity(0.2),
+            backgroundColor: const Color(0xFF6A1B9A).withOpacity(0.15),
             child: Text(
               widget.request.patientName[0].toUpperCase(),
               style: const TextStyle(
@@ -124,7 +137,7 @@ class _ConsultationRequestDetailScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Assessment Details'),
+          _buildSectionTitle('Assessment Overview'),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(16),
@@ -155,72 +168,202 @@ class _ConsultationRequestDetailScreenState
     );
   }
 
-  Widget _buildTimeSlotSection() {
+  Widget _buildCollapsibleAssessmentResponses() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                _isAssessmentExpanded = !_isAssessmentExpanded;
+              });
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF6A1B9A).withOpacity(0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(12),
+                  topRight: const Radius.circular(12),
+                  bottomLeft: Radius.circular(_isAssessmentExpanded ? 0 : 12),
+                  bottomRight: Radius.circular(_isAssessmentExpanded ? 0 : 12),
+                ),
+                border: Border.all(
+                  color: const Color(0xFF6A1B9A).withOpacity(0.2),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.question_answer,
+                    color: const Color(0xFF6A1B9A).withOpacity(0.7),
+                    size: 24,
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Text(
+                      'Assessment Responses',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF6A1B9A),
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    _isAssessmentExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: const Color(0xFF6A1B9A),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: _isAssessmentExpanded ? null : 0,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+                border: Border.all(
+                  color: const Color(0xFF6A1B9A).withOpacity(0.2),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _assessmentResponses.entries.map((entry) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          entry.key,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[800],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _getResponseColor(entry.value),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              entry.value,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (entry != _assessmentResponses.entries.last)
+                          const Padding(
+                            padding: EdgeInsets.only(top: 16),
+                            child: Divider(height: 1),
+                          ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper to get color based on response severity
+  Color _getResponseColor(String response) {
+    switch (response) {
+      case 'Not at all':
+        return Colors.green.shade300; // Lighter green
+      case 'Several days':
+        return Colors.amber.shade300; // Lighter amber
+      case 'More than half the days':
+        return Colors.orange.shade300; // Lighter orange
+      case 'Nearly every day':
+        return Colors.red.shade300; // Lighter red
+      default:
+        return Colors.grey.shade300; // Lighter grey
+    }
+  }
+
+  Widget _buildSelectedTimeSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Proposed Time Slots'),
+          _buildSectionTitle('Selected Time Slot'),
           const SizedBox(height: 12),
-          ...List.generate(
-            widget.request.proposedTimes.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    selectedTimeIndex = index;
-                    selectedTime = widget.request.proposedTimes[index];
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: selectedTimeIndex == index
-                        ? const Color(0xFF6A1B9A).withOpacity(0.1)
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: selectedTimeIndex == index
-                          ? const Color(0xFF6A1B9A)
-                          : Colors.grey.withOpacity(0.2),
-                      width: selectedTimeIndex == index ? 2 : 1,
-                    ),
-                  ),
-                  child: Row(
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF6A1B9A).withOpacity(0.05),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: const Color(0xFF6A1B9A).withOpacity(0.2),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.event_available,
+                  color: Color(0xFF6A1B9A),
+                  size: 24,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        selectedTimeIndex == index
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        color: selectedTimeIndex == index
-                            ? const Color(0xFF6A1B9A)
-                            : Colors.grey,
-                        size: 22,
+                      const Text(
+                        'Patient selected:',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          dateFormat.format(widget.request.proposedTimes[index]),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: selectedTimeIndex == index
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: selectedTimeIndex == index
-                                ? const Color(0xFF6A1B9A)
-                                : Colors.black87,
-                          ),
+                      const SizedBox(height: 4),
+                      Text(
+                        dateFormat.format(widget.request.proposedTimes[0]),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF6A1B9A),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
@@ -247,9 +390,9 @@ class _ConsultationRequestDetailScreenState
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
+                Icon(
                   Icons.format_quote,
-                  color: Color(0xFF6A1B9A),
+                  color: const Color(0xFF6A1B9A).withOpacity(0.7),
                   size: 24,
                 ),
                 const SizedBox(width: 12),
@@ -291,7 +434,7 @@ class _ConsultationRequestDetailScreenState
               onPressed: () => _showDeclineDialog(),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.red[700],
-                side: BorderSide(color: Colors.red[700]!),
+                side: BorderSide(color: Colors.red[700]!.withOpacity(0.7)),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -306,13 +449,10 @@ class _ConsultationRequestDetailScreenState
           const SizedBox(width: 16),
           Expanded(
             child: ElevatedButton(
-              onPressed: selectedTime == null
-                  ? null
-                  : () => _showAcceptDialog(),
+              onPressed: () => _showAcceptDialog(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6A1B9A),
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                disabledBackgroundColor: Colors.grey[300],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -346,7 +486,7 @@ class _ConsultationRequestDetailScreenState
         Icon(
           icon,
           size: 20,
-          color: const Color(0xFF6A1B9A),
+          color: const Color(0xFF6A1B9A).withOpacity(0.7),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -379,9 +519,9 @@ class _ConsultationRequestDetailScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
+        title: Text(
           'Confirm Consultation',
-          style: TextStyle(color: Color(0xFF6A1B9A)),
+          style: TextStyle(color: const Color(0xFF6A1B9A).withOpacity(0.9)),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -398,19 +538,19 @@ class _ConsultationRequestDetailScreenState
                 color: const Color(0xFF6A1B9A).withOpacity(0.05),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: const Color(0xFF6A1B9A).withOpacity(0.3),
+                  color: const Color(0xFF6A1B9A).withOpacity(0.2),
                 ),
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.calendar_month,
-                    color: Color(0xFF6A1B9A),
+                    color: const Color(0xFF6A1B9A).withOpacity(0.8),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      dateFormat.format(selectedTime!),
+                      dateFormat.format(widget.request.proposedTimes[0]),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -434,7 +574,7 @@ class _ConsultationRequestDetailScreenState
             onPressed: () {
               Provider.of<ConsultationProvider>(context, listen: false)
                   .updateRequestStatus(
-                      widget.request.id, 'accepted', selectedTime!);
+                      widget.request.id, 'accepted', widget.request.proposedTimes[0]);
               Navigator.pop(context); // Close dialog
               Navigator.pop(context); // Go back to list
             },
@@ -457,7 +597,7 @@ class _ConsultationRequestDetailScreenState
       builder: (context) => AlertDialog(
         title: Text(
           'Decline Consultation',
-          style: TextStyle(color: Colors.red[700]),
+          style: TextStyle(color: Colors.red[400]),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -474,7 +614,7 @@ class _ConsultationRequestDetailScreenState
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.red[700]!),
+                  borderSide: BorderSide(color: Colors.red[400]!),
                 ),
               ),
               maxLines: 3,
@@ -511,7 +651,7 @@ class _ConsultationRequestDetailScreenState
               Navigator.pop(context); // Go back to list
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[700],
+              backgroundColor: Colors.red[400],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
