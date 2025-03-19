@@ -1,38 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:therapist/core/theme/theme.dart';
-import 'provider/home_provider.dart';
-import 'provider/therapist_provider.dart';
-import 'provider/consultation_provider.dart';
-import 'package:therapist/core/services/consultation_service.dart'; // Updated import path
-import 'presentation/home/home_screen.dart';
+import './provider/auth_provider.dart';
+import './provider/home_provider.dart';
+import './provider/therapist_provider.dart';
+import './provider/consultation_provider.dart';
+import './core/services/consultation_service.dart'; // Use proper path
+import './presentation/home/home_screen.dart';
+import './presentation/widget/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => TherapistDataProvider()),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => TherapistDataProvider()),
         ChangeNotifierProvider(
-          create: (_) => ConsultationProvider(
+          create: (context) => ConsultationProvider(
             ConsultationService(),
           )..fetchConsultationRequests(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Therapist App',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(),
-        home: const HomeScreen(),
-      ),
+      child: TherapyApp(),
+    ),
+  );
+}
+
+class TherapyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Get authentication state
+    final authProvider = Provider.of<AuthProvider>(context);
+    
+    return MaterialApp(
+      title: 'Therapist App',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme(),
+      home: authProvider.isAuthenticated ? const HomeScreen() : SplashScreen(),
     );
   }
 }

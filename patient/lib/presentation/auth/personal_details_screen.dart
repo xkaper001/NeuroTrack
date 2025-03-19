@@ -1,5 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:patient/presentation/home/home_screen.dart';
+import 'package:patient/presentation/home/home_screen_slider.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   const PersonalDetailsScreen({super.key});
@@ -37,11 +39,20 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         child: FilledButton(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
+              String userName = isAssessmentForChild ? childNameController.text : adultNameController.text;
               if (isAssessmentForChild) {
                 // TODO: Call Child API and route accordingly
               } else {
                 // TODO: Call Adult API and route accordingly
               }
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(userName: userName),
+            //       builder: (context) => AutismLevelSlider(currentLevel: 1, // Replace with dynamic data from backend
+            // maxLevel: 10,),
+                ),
+              );
+              
             }
           },
           child: const Text(
