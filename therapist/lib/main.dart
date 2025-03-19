@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:therapist/core/theme/theme.dart';
 import 'provider/home_provider.dart';
 import 'provider/therapist_provider.dart';
+import 'provider/consultation_provider.dart';
+import 'package:therapist/core/services/consultation_service.dart'; // Updated import path
 import 'presentation/home/home_screen.dart';
 
 void main() {
@@ -19,6 +21,11 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => TherapistDataProvider()),
+        ChangeNotifierProvider(
+          create: (_) => ConsultationProvider(
+            ConsultationService(),
+          )..fetchConsultationRequests(),
+        ),
       ],
       child: MaterialApp(
         title: 'Therapist App',
