@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:provider/provider.dart';
+import '../../provider/assessment_provider.dart';
 
 class TherapyGoalsScreen extends StatefulWidget {
   const TherapyGoalsScreen({Key? key}) : super(key: key);
@@ -10,122 +11,117 @@ class TherapyGoalsScreen extends StatefulWidget {
 }
 
 class _TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
-  int selectedTabIndex = 0; // 0 for Goals, 1 for Achievements, 2 for Observations
-  String selectedDate = "Today"; 
-  List<String> getDatesList() {
-    DateTime now = DateTime.now();
-    int today = now.day;
-    int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
+  int selectedTabIndex =
+      0; // 0 for Goals, 1 for Achievements, 2 for Observations
+  DateTime selectedDate = DateTime.now();
 
-    List<String> dates = [];
-    for (int i = today - 3; i <= today + 3; i++) {
-      if (i > 0 && i <= daysInMonth) {
-        dates.add(i == today ? "Today" : i.toString());
-      }
-    }
-    return dates;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<AssessmentProvider>(context, listen: false)
+          .fetchAssessmentBySelectedId();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> dates = getDatesList();
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Therapy Goals"),
+        title: const Text("Therapy Goals"),
         centerTitle: true,
         elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 20),
+        padding:
+            EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Date Picker Bar
-            SizedBox(
-              height: 80,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: dates.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedDate = dates[index];
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
-                      child: Chip(
-                        label: Text(
-                          dates[index],
-                          style: TextStyle(
-                            fontSize: 16, 
-                            fontWeight: FontWeight.w600,
-                            color: selectedDate == dates[index] ? Colors.white : Colors.black,
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-                        backgroundColor: selectedDate == dates[index]
-                            ? const Color(0xFF7A86F8) 
-                            : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(color: Colors.grey.shade300),
+            EasyDateTimeLinePicker.itemBuilder(
+              firstDate: DateTime(2025, 3, 1),
+              lastDate: DateTime(2025, 4, 1),
+              focusedDate: selectedDate,
+              itemExtent: screenWidth * 0.2,
+              itemBuilder:
+                  (context, date, isSelected, isDisabled, isToday, onTap) {
+                return GestureDetector(
+                  onTap: onTap,
+                  child: SizedBox(
+                    height: 20,
+                    width: isToday ? screenWidth * 0.25 : screenWidth * 0.2,
+                    child: Container(
+                      constraints: BoxConstraints(minHeight: 30, maxHeight: 40),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isSelected ? Color(0xFF7A86F8) : Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Text(
+                        isToday ? "Today" : "${date.day}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: isSelected ? Colors.white : Colors.black,
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
+              onDateChange: (date) {
+                setState(() {
+                  selectedDate = date;
+                });
+              },
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Therapy Card
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color.fromARGB(82, 158, 158, 158), width: 1),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade200,
-                    blurRadius: 4,
-                    spreadRadius: 1,
-                  ),
-                ],
+                border:
+                    Border.all(color: const Color.fromARGB(82, 158, 158, 158)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 24,
                         backgroundImage: AssetImage('assets/therapist_img.png'),
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Therapist Name",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black),
                           ),
                           Text(
                             "Neurologist",
-                            style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                            style: TextStyle(
+                                color: Colors.grey.shade600, fontSize: 14),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
-
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -133,8 +129,7 @@ class _TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
                       _buildInfoColumn("Done at", "05:30 PM"),
                     ],
                   ),
-                  SizedBox(height: 12),
-
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -146,14 +141,14 @@ class _TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
               ),
             ),
 
-            SizedBox(height: 30),
+            const SizedBox(height: 25),
 
             // Tab Selection
             Container(
-              padding: EdgeInsets.all(6),
+              padding: const EdgeInsets.all(6),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[50],
+                color: const Color.fromRGBO(250, 250, 250, 1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -166,15 +161,15 @@ class _TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 15),
 
             // Content Display
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey[50],
+                  color: const Color.fromRGBO(250, 250, 250, 1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: _buildContent(selectedTabIndex),
@@ -194,10 +189,12 @@ class _TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
         });
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 10),
         decoration: BoxDecoration(
-          color: selectedTabIndex == index ? const Color(0xFF7A86F8) : Colors.transparent,
+          color: selectedTabIndex == index
+              ? const Color(0xFF7A86F8)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
@@ -217,31 +214,42 @@ class _TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(color: Colors.grey.shade600)),
-        Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+        Text(value,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Colors.black)),
       ],
     );
   }
 
   Widget _buildContent(int index) {
-    List<String> goals = [
-      "A heartbeat is a two-part pumping action that takes about a second.",
-      "As blood collects in the upper chambers (the right and left atria).",
-      "The heart's natural pacemaker (the SA node) sends out an electrical signal.",
-    ];
+    final assessmentProvider = Provider.of<AssessmentProvider>(context);
+    final assessment = assessmentProvider.assessment;
 
-    List<String> achievements = [
-      "Completed therapy session successfully.",
-      "Improved heart rate by 10%.",
-      "Better response to electrical signals.",
-    ];
+    if (assessment == null || !assessment.containsKey('questions')) {
+      return Center(
+        child: Text(
+          "No Data Available",
+          style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+        ),
+      );
+    }
 
-    List<String> observations = [
-      "Patient showed increased stamina during exercise.",
-      "Heart rate normalized faster than last session.",
-      "Slight fatigue observed after extended activity.",
-    ];
+    List<String> goals = assessment['questions']
+        .map<String>((q) => q['question'] as String)
+        .toList();
 
-    List<String> data = index == 0 ? goals : (index == 1 ? achievements : observations);
+    List<String> achievements = assessment['questions']
+        .map<String>((q) => "Achieved: ${q['question']}")
+        .toList();
+
+    List<String> observations = assessment['questions']
+        .map<String>((q) => "Observed: ${q['question']}")
+        .toList();
+
+    List<String> data =
+        index == 0 ? goals : (index == 1 ? achievements : observations);
 
     return ListView.builder(
       itemCount: data.length,
