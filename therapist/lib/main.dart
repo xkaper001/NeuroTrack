@@ -5,11 +5,16 @@ import './provider/auth_provider.dart';
 import './provider/home_provider.dart';
 import './provider/therapist_provider.dart';
 import './provider/consultation_provider.dart';
-import './core/services/consultation_service.dart'; // Use proper path
+import './repository/supabase_consultation_repository.dart'; // Using our repository implementation
 import './presentation/home/home_screen.dart';
 import './presentation/widget/splash_screen.dart';
 
 void main() {
+  
+  final consultationRepository = SupabaseConsultationRepository(
+    supabaseClient: null, 
+  );
+  
   runApp(
     MultiProvider(
       providers: [
@@ -18,7 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => TherapistDataProvider()),
         ChangeNotifierProvider(
           create: (context) => ConsultationProvider(
-            ConsultationService(),
+            consultationRepository, 
           )..fetchConsultationRequests(),
         ),
       ],

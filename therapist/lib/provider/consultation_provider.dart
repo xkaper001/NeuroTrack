@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:therapist/core/entities/consultation/consultation_request_entity.dart';
-import 'package:therapist/core/services/consultation_service.dart';
+import 'package:therapist/core/repository/consultation/consultation_repository.dart';
+import 'package:therapist/core/result/result.dart';
 
 class ConsultationProvider extends ChangeNotifier {
-  final ConsultationService _consultationService;
+  final ConsultationRepository _consultationRepository;
   List<ConsultationRequestEntity> _consultationRequests = [];
   bool _isLoading = false;
   String? _error;
 
-  ConsultationProvider(this._consultationService);
+  ConsultationProvider(this._consultationRepository);
 
   List<ConsultationRequestEntity> get consultationRequests => _consultationRequests;
   bool get isLoading => _isLoading;
@@ -20,7 +21,14 @@ class ConsultationProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _consultationRequests = await _consultationService.fetchConsultationRequests();
+      final result = await _consultationRepository.fetchConsultationRequests();
+      
+      if (result is ActionResultSuccess) {
+        _consultationRequests = result.data as List<ConsultationRequestEntity>;
+      } else if (result is ActionResultFailure) {
+        _error = result.errorMessage;
+        debugPrint(_error);
+      }
     } catch (e) {
       _error = 'Failed to load consultation requests: ${e.toString()}';
       debugPrint(_error);
@@ -29,44 +37,39 @@ class ConsultationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-// In ConsultationProvider.dart
-Future<void> updateRequestStatus(
-  String requestId, 
-  String status, 
-  DateTime? scheduledTime, 
-  {String? notes}
-) async {
-  _isLoading = true;
-  notifyListeners();
 
-  try {
-    // Update the request in the service
-    await _consultationService.updateRequestStatus(
-      requestId: requestId,
-      status: status,
-      scheduledTime: scheduledTime,
-      notes: notes,
-    );
+  Future<void> updateRequestStatus(
+    String requestId, 
+    String status, 
+    DateTime? scheduledTime, 
+    {String? notes}
+  ) async {
+    _isLoading = true;
+    notifyListeners();
 
-    // Update our local data to reflect the change
-    final index = _consultationRequests.indexWhere((req) => req.id == requestId);
-    if (index != -1) {
-      final request = _consultationRequests[index];
-      _consultationRequests[index] = request.$copyWith(
+    try {
+      final result = await _consultationRepository.updateRequestStatus(
+        requestId: requestId,
         status: status,
         scheduledTime: scheduledTime,
-        notes: notes ?? request.notes,
-        lastUpdated: DateTime.now(),
+        notes: notes,
       );
+
+      if (result is ActionResultSuccess) {
+        // Refresh consultation requests after update
+        await fetchConsultationRequests();
+      } else if (result is ActionResultFailure) {
+        _error = result.errorMessage;
+        debugPrint(_error);
+      }
+    } catch (e) {
+      _error = 'Failed to update request status: ${e.toString()}';
+      debugPrint(_error);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-  } catch (e) {
-    _error = 'Failed to update request status: ${e.toString()}';
-    debugPrint(_error);
-  } finally {
-    _isLoading = false;
-    notifyListeners();
   }
-}
 
   // Filter methods for UI convenience
   List<ConsultationRequestEntity> get pendingRequests => 
