@@ -40,10 +40,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Patient App',
-      theme: AppTheme.lightTheme(),
-      home: const SplashScreen(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Patient App',
+        theme: AppTheme.lightTheme(),
+        home: const SplashScreen());
   }
 }
