@@ -5,7 +5,7 @@ import 'package:therapist/presentation/consultation/consultation_requests_screen
 import 'package:therapist/provider/consultation_provider.dart';
 import '../widget/stats_card.dart';
 import '../widget/patient_card.dart';
-import '../sessions/sessions_screen.dart';
+import '../session/session_screen.dart';
 import '../profile/profile_screen.dart';
 import 'dart:async';
 
@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const HomeContent(),
-    const SessionsScreen(),
+    const SessionScreen(),
     const ProfileScreen(),
   ];
 
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.grey,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: Color(0xFFFAFAFA), // Changed bottom nav color
+        backgroundColor: Color(0xFFFAFAFA), 
       ),
     );
   }
