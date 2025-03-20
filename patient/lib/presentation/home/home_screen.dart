@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                           // Therapy Goals Card
                           Card(
                             elevation: 0,
-                            color: const Color(0xFFFFFFFF),
+                            color: const Color(0xFFF9F3E3),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -246,7 +246,7 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavItem('assets/Home.png',
+                  _buildNavItem('assets/home.png',
                       isSelected: true),
                   _buildNavItem('assets/Report.png'),
                   _buildNavItem('assets/Calendar.png',

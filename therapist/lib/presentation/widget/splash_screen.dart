@@ -1,29 +1,23 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:patient/presentation/auth/auth_screen.dart';
+import 'dart:async';
+import '../auth/auth_screen.dart';  // Import AuthScreen
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToAuthScreen();
-  }
-
-  Future<void> _navigateToAuthScreen() async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {
+    
+    // Navigate to AuthScreen after 3 seconds
+    Timer(Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const AuthScreen()),
+        MaterialPageRoute(builder: (context) => AuthScreen()),
       );
-    }
+    });
   }
 
   @override
@@ -34,12 +28,15 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/logo.png', width: 100),
-            const SizedBox(height: 20),
+            Image.asset(
+              'assets/splash_img.png',  // Make sure image is in assets folder
+              height: 100, // Adjust size as needed
+            ),
+            SizedBox(height: 16),
             Text(
               "Neurotrack",
-              style: GoogleFonts.poppins(
-                fontSize: 24,
+              style: TextStyle(
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.blueAccent,
               ),

@@ -63,24 +63,22 @@ class LevelIndicator extends StatelessWidget {
                       // Current level indicator (triangle)
                       // Current level indicator (triangle with text above)
                       Positioned(
-                        left: (currentLevel / maxLevel) *
-                            MediaQuery.of(context).size.width *
-                            0.8, // Dynamic positioning
+                        left: (currentLevel / (maxLevel)) *
+                            (MediaQuery.of(context).size.width * 0.8 -
+                                25), // Adjust for better alignment
                         child: Column(
                           children: [
                             Text(
-                              currentLevel.toStringAsFixed(
-                                  0), // Display current level dynamically
+                              currentLevel.toStringAsFixed(0),
                               style: const TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(
-                                height: 5), // Space between text and triangle
+                            const SizedBox(height: 5),
                             CustomPaint(
-                              size: const Size(20, 20), // Triangle size
+                              size: const Size(20, 20),
                               painter: TrianglePainter(),
                             ),
                           ],
@@ -90,7 +88,6 @@ class LevelIndicator extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-          
               ],
             ),
           ],
