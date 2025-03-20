@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:patient/presentation/widgets/google_signin_button.dart';
 import '../widgets/welcome_header.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -179,30 +180,8 @@ class _AuthScreenState extends State<AuthScreen> {
                   bottom: 40,
                   left: 0,
                   right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ElevatedButton(
-                      // onPressed: () async{
-
-                      //   await supabase.auth.
-                      //   signInWithOAuth(
-                      //     OAuthProvider.google,
-                      //     // redirectTo: kIsWeb ? null : 'com.mycompany.cbtdiary://login-callback/',
-                      //     // authScreenLaunchMode: kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication,
-                      //   );
-
-                      // },
-                      onPressed: _handleGoogleSignIn,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/google_logo.png', height: 24),
-                          const SizedBox(width: 10),
-                          const Text('Sign in with Google'),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: GoogleSignInButton(),
+                  
                 ),
               ],
             ),

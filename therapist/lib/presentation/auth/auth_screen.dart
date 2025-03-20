@@ -4,6 +4,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:therapist/presentation/widgets/google_signin_button.dart';
 import '../home/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -67,37 +68,6 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     });
 
-  }
-
-
-  Future<void> _handleGoogleSignIn() async {
-    try {
-      final supabaseUrl = dotenv.env['SUPABASE_URL'];
-      await supabase.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: kIsWeb
-            ? "$supabaseUrl/auth/v1/callback"
-            : 'com.mycompany.cbtdiary://login-callback/',
-        authScreenLaunchMode:
-            kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication,
-      );
-
-      final session = supabase.auth.currentSession;
-      debugPrint("User authenticated, navigating to HomeScreen");
-      print(session);
-
-      if (session != null && mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      }
-    } catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign in failed: $error')),
-        );
-      }
-    }
   }
 
   @override
@@ -196,32 +166,12 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
           const SizedBox(height: 20),
+          
 
           // Google Sign-In Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              onPressed: _handleGoogleSignIn,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/google_logo.png", height: 24),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Continue with Google",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
+            child: GoogleSignInButton(),
           ),
           const SizedBox(height: 20),
         ],
