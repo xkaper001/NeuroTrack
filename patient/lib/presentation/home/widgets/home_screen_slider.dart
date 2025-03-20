@@ -5,10 +5,10 @@ class LevelIndicator extends StatelessWidget {
   final int maxLevel; // Maximum level for slider
 
   const LevelIndicator({
-    Key? key,
+    super.key,
     required this.currentLevel,
     required this.maxLevel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

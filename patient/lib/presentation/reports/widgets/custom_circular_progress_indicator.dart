@@ -30,7 +30,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
           Center(
             child: Text(
               '$percentage%',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

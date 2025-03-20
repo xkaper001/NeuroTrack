@@ -24,7 +24,7 @@ class MilestoneProgressCard extends StatelessWidget {
       ),
       height: height,
       decoration: BoxDecoration(
-        color: const Color(0xFFF9BEA0),
+        color: const Color(0xFFF8A07A),
         borderRadius: BorderRadius.circular(26),
       ),
       child: Row(

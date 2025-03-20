@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:patient/core/theme/theme.dart';
-import 'package:patient/presentation/reports/models/milestone_card_data.dart';
-import 'package:patient/presentation/reports/models/milestone_section_data.dart';
-import 'package:patient/presentation/reports/models/progress_card_data.dart';
 import 'package:patient/presentation/reports/widgets/expandable_section.dart';
 import 'package:patient/presentation/reports/widgets/progress_summary.dart';
 import 'package:patient/presentation/reports/widgets/milestone_cards.dart';
+import 'package:patient/presentation/reports/widgets/milestone_list_item.dart';
+import 'package:patient/provider/reports_provider.dart';
+import 'package:provider/provider.dart';
 
 class ReportsScreen extends StatelessWidget {
-  // Define the dynamic data
-
   const ReportsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Access the provider
+    final reportsProvider = Provider.of<ReportsProvider>(context);
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
@@ -60,38 +60,45 @@ class ReportsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // Milestone Cards - Rearranged Layout with dynamic data
+                    // Milestone Cards - Using provider data
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // Left column - Completed card
                         CompletedMilestoneCard(
-                          iconPath: milestoneCards[0].iconPath,
-                          iconColor: milestoneCards[0].iconColor,
-                          backgroundColor: milestoneCards[0].backgroundColor,
-                          value: milestoneCards[0].value,
-                          label: milestoneCards[0].label,
+                          iconPath: reportsProvider.milestoneCards[0]
+                              ['iconPath'],
+                          iconColor: reportsProvider.milestoneCards[0]
+                              ['iconColor'],
+                          backgroundColor: reportsProvider.milestoneCards[0]
+                              ['backgroundColor'],
+                          value: reportsProvider.milestoneCards[0]['value'],
+                          label: reportsProvider.milestoneCards[0]['label'],
                         ),
                         // Right column - Missed and Regressed cards stacked
                         Column(
                           children: [
                             HorizontalMilestoneCard(
-                              iconPath: milestoneCards[1].iconPath,
-                              iconColor: milestoneCards[1].iconColor,
-                              backgroundColor:
-                                  milestoneCards[1].backgroundColor,
-                              value: milestoneCards[1].value,
-                              label: milestoneCards[1].label,
+                              iconPath: reportsProvider.milestoneCards[1]
+                                  ['iconPath'],
+                              iconColor: reportsProvider.milestoneCards[1]
+                                  ['iconColor'],
+                              backgroundColor: reportsProvider.milestoneCards[1]
+                                  ['backgroundColor'],
+                              value: reportsProvider.milestoneCards[1]['value'],
+                              label: reportsProvider.milestoneCards[1]['label'],
                             ),
                             const SizedBox(height: 12),
                             HorizontalMilestoneCard(
-                              iconPath: milestoneCards[2].iconPath,
-                              iconColor: milestoneCards[2].iconColor,
-                              backgroundColor:
-                                  milestoneCards[2].backgroundColor,
-                              value: milestoneCards[2].value,
-                              label: milestoneCards[2].label,
+                              iconPath: reportsProvider.milestoneCards[2]
+                                  ['iconPath'],
+                              iconColor: reportsProvider.milestoneCards[2]
+                                  ['iconColor'],
+                              backgroundColor: reportsProvider.milestoneCards[2]
+                                  ['backgroundColor'],
+                              value: reportsProvider.milestoneCards[2]['value'],
+                              label: reportsProvider.milestoneCards[2]['label'],
                             ),
                           ],
                         ),
@@ -99,12 +106,14 @@ class ReportsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // Progress Card - Dynamic data
+                    // Progress Card - Using provider data
                     MilestoneProgressCard(
-                      value: progressCard.value,
-                      label: progressCard.label,
-                      percentage: progressCard.percentage.toInt(),
-                      height: progressCard.height,
+                      value: reportsProvider.progressCard['value'],
+                      label: reportsProvider.progressCard['label'],
+                      percentage:
+                          (reportsProvider.progressCard['percentage'] as double)
+                              .toInt(),
+                      height: reportsProvider.progressCard['height'],
                     ),
                     const SizedBox(height: 24),
 
@@ -117,11 +126,20 @@ class ReportsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // Dynamic Expandable Sections using ExpandableSection
-                    ...milestoneSections.map((section) => ExpandableSection(
-                          title: section.title,
-                          children: section.items,
-                        )),
+                    // Dynamic Expandable Sections using provider data
+                    ...reportsProvider.milestoneSections.map((section) {
+                      final items =
+                          (section['items'] as List<Map<String, String>>)
+                              .map((item) => MilestoneListItem(
+                                    title: item['title']!,
+                                    description: item['description']!,
+                                  ))
+                              .toList();
+                      return ExpandableSection(
+                        title: section['title'],
+                        children: items,
+                      );
+                    }),
                   ],
                 ),
               ),

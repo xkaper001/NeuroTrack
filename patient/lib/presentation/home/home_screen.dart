@@ -1,5 +1,6 @@
 // home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/home/widgets/home_screen_slider.dart';
 import 'package:patient/presentation/home/widgets/therapy_goal_card.dart';
 import 'package:patient/presentation/reports/report_screen.dart'; // Import the new widget
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _screens = [
       _buildHomeContent(),
-      ReportsScreen(),
+      const ReportsScreen(),
       _buildCalendarContent(),
       _buildNotificationsContent(),
       _buildProfileContent(),
@@ -81,16 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Container(
         padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: _selectedIndex == index
-              ? Colors.blue.shade50
-              : Colors.transparent,
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
         ),
         child: ImageIcon(
           AssetImage(assetPath),
           color:
-              _selectedIndex == index ? const Color(0xFFCB6CE6) : Colors.grey,
+              _selectedIndex == index ? AppTheme.secondaryColor : Colors.grey,
         ),
       ),
     );
