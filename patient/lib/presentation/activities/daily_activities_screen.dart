@@ -1,3 +1,4 @@
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +14,7 @@ class DailyActivitiesScreen extends StatefulWidget {
 
 class _DailyActivitiesScreenState extends State<DailyActivitiesScreen>
     with SingleTickerProviderStateMixin {
-  late ScrollController _scrollController;
   late DateTime today;
-  late int currentDay;
-  late List<DateTime> dates;
   late AnimationController _progressController;
   late Animation<double> _progressAnimation;
   double _prevProgress = 0.0;
@@ -24,59 +22,17 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen>
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     today = DateTime.now();
-    currentDay = today.day;
-    dates =
-        List.generate(7, (index) => today.subtract(Duration(days: 3 - index)));
-
     _progressController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToToday();
-    });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _progressController.dispose();
     super.dispose();
-  }
-
-  void _scrollToToday() {
-    final todayIndex = dates.indexWhere((date) => date.day == currentDay);
-    if (todayIndex != -1) {
-      const todayItemWidth = 75.0;
-      const regularItemWidth = 50.0;
-      const itemPadding = 8.0;
-
-      double position = 0;
-
-      for (int i = 0; i < todayIndex; i++) {
-        position += regularItemWidth + itemPadding;
-      }
-
-      final screenWidth = MediaQuery.of(context).size.width;
-      final offset = position - (screenWidth / 2) + (todayItemWidth / 2);
-
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          offset.clamp(0.0, _scrollController.position.maxScrollExtent),
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    }
-  }
-
-  bool _isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year &&
-        date1.month == date2.month &&
-        date1.day == date2.day;
   }
 
   void _animateProgress(double end) {
@@ -100,6 +56,7 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen>
     final tasks = taskProvider.tasks;
     final completedTasks = taskProvider.completedTasksCount;
     final totalTasks = taskProvider.totalTasksCount;
+    final selectedDate = taskProvider.selectedDate;
 
     final progressValue = totalTasks > 0 ? completedTasks / totalTasks : 0.0;
 
@@ -120,56 +77,60 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen>
       ),
       body: Column(
         children: [
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 60,
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: dates.length,
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final date = dates[index];
-                final isToday = _isSameDay(date, today);
-                final isSelected = _isSameDay(date, taskProvider.selectedDate);
-
-                return GestureDetector(
-                  onTap: () {
-                    taskProvider.setSelectedDate(date);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: Container(
-                      width: isToday ? 75 : 50,
-                      height: 60,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color:
-                            isSelected ? AppTheme.primaryColor : Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: isSelected
-                            ? Border.all(
-                                width: 0,
-                              )
-                            : Border.all(
-                                width: 1,
-                                color: const Color.fromRGBO(232, 232, 232, 1),
-                              ),
-                      ),
-                      child: Text(
-                        isToday ? 'Today' : '${date.day}',
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black87,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
+          EasyTheme(
+            data: EasyTheme.of(context).copyWith(
+              timelineOptions: const TimelineOptions(
+                height: 60,
+              ),
+              selectionMode: const SelectionMode.autoCenter(),
+              dayShape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: const BorderSide(
+                    color: Colors.grey,
+                    width: 1,
                   ),
-                );
+                ),
+              ),
+              currentDayBorder: const WidgetStatePropertyAll(
+                BorderSide(
+                  color: AppTheme.primaryColor,
+                  width: 2,
+                ),
+              ),
+              currentDayShape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              currentDayMiddleElementStyle: const WidgetStatePropertyAll(
+                TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              dayMiddleElementStyle: const WidgetStatePropertyAll(
+                TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            child: EasyDateTimeLinePicker(
+              firstDate: today.subtract(const Duration(days: 365)),
+              lastDate: today.add(const Duration(days: 365)),
+              focusedDate: selectedDate,
+              itemExtent: 50,
+              onDateChange: (date) {
+                taskProvider.setSelectedDate(date);
               },
+              currentDate: today,
+              dayElementsOrder: const [
+                DayElement.middle(),
+              ],
+              headerOptions: const HeaderOptions(
+                headerType: HeaderType.none,
+              ),
             ),
           ),
           const SizedBox(height: 24),
