@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../presentation/home/home_screen.dart';
 import './provider/session_provider.dart';
+import './provider/auth_provider.dart';
+import './provider/home_provider.dart';
+import './provider/therapist_provider.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -22,6 +25,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SessionProvider()),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => TherapistDataProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widget/stats_card.dart';
 import '../widget/patient_card.dart';
-import '../calendar/calendar_screen.dart';
+import '../session/session_screen.dart';
 import '../profile/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const HomeContent(),
-    const CalendarScreen(),
+    const SessionScreen(),
     const ProfileScreen(),
   ];
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/session_provider.dart';
-import '../widget/session_card.dart';
+import '../sessions/widgets/session_card.dart';
 
-class CalendarScreen extends StatelessWidget {
-  const CalendarScreen({super.key});
+class SessionScreen extends StatelessWidget {
+  const SessionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
