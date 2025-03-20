@@ -13,8 +13,10 @@ jobs:
         with:
           flutter-version: "3.27.4"
           channel: "stable"
+      - name: Change directory to patient
+        run: cd patient
       - name: Running pub get to fetch dependencies
-        run: cd patient && flutter pub get
+        run: flutter pub get
       - name: Building for android
         run: flutter build apk
         
@@ -27,7 +29,9 @@ jobs:
         with:
           flutter-version: "3.27.4"
           channel: "stable"
+      - name : Change directory to therapist
+        run: cd therapist
       - name: Running pub get to fetch dependencies
-        run: cd therapist && flutter pub get
+        run: flutter pub get
       - name: Building for android
         run: flutter build apk
