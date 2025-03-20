@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:patient/presentation/activities/model/task.dart';
+import 'package:patient/model/task_model.dart';
 
 class TaskProvider extends ChangeNotifier {
-  final List<Task> _allTasks = [];
+  final List<PatientTaskModel> _allTasks = [];
   DateTime _selectedDate = DateTime.now();
 
   TaskProvider() {
@@ -13,29 +13,29 @@ class TaskProvider extends ChangeNotifier {
     // Created tasks for demo purposes
     // TODO: Replace demo tasks with backend data from supabase
     final today = DateTime.now();
-    
+
     _allTasks.addAll([
-      Task(title: 'Brush Teeth', isCompleted: false, date: today),
-      Task(title: 'Have Breakfast', isCompleted: false, date: today),
-      Task(title: 'Take Medications', isCompleted: false, date: today),
-      Task(title: 'Morning Walk', isCompleted: false, date: today),
-      Task(title: 'Read a Book', isCompleted: false, date: today),
+      PatientTaskModel(title: 'Brush Teeth', isCompleted: false, date: today),
+      PatientTaskModel(title: 'Have Breakfast', isCompleted: false, date: today),
+      PatientTaskModel(title: 'Take Medications', isCompleted: false, date: today),
+      PatientTaskModel(title: 'Morning Walk', isCompleted: false, date: today),
+      PatientTaskModel(title: 'Read a Book', isCompleted: false, date: today),
     ]);
 
     final yesterday = today.subtract(const Duration(days: 1));
     _allTasks.addAll([
-      Task(title: 'Morning Stretching', isCompleted: true, date: yesterday),
-      Task(title: 'Language Exercise', isCompleted: true, date: yesterday),
-      Task(title: 'Memory Game', isCompleted: false, date: yesterday),
+      PatientTaskModel(title: 'Morning Stretching', isCompleted: true, date: yesterday),
+      PatientTaskModel(title: 'Language Exercise', isCompleted: true, date: yesterday),
+      PatientTaskModel(title: 'Memory Game', isCompleted: false, date: yesterday),
     ]);
 
     final tomorrow = today.add(const Duration(days: 1));
     _allTasks.addAll([
-      Task(title: 'Speech Therapy Exercise', isCompleted: false, date: tomorrow),
-      Task(title: 'Cognitive Task', isCompleted: false, date: tomorrow),
-      Task(title: 'Balance Training', isCompleted: false, date: tomorrow),
+      PatientTaskModel(
+          title: 'Speech Therapy Exercise', isCompleted: false, date: tomorrow),
+      PatientTaskModel(title: 'Cognitive PatientTaskModel', isCompleted: false, date: tomorrow),
+      PatientTaskModel(title: 'Balance Training', isCompleted: false, date: tomorrow),
     ]);
-
   }
 
   DateTime get selectedDate => _selectedDate;
@@ -45,12 +45,13 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Task> get tasks {
-    return _allTasks.where((task) => 
-      task.date.year == _selectedDate.year &&
-      task.date.month == _selectedDate.month &&
-      task.date.day == _selectedDate.day
-    ).toList();
+  List<PatientTaskModel> get tasks {
+    return _allTasks
+        .where((task) =>
+            task.date.year == _selectedDate.year &&
+            task.date.month == _selectedDate.month &&
+            task.date.day == _selectedDate.day)
+        .toList();
   }
 
   void toggleTaskCompletion(int index, bool isCompleted) {
@@ -58,14 +59,18 @@ class TaskProvider extends ChangeNotifier {
     if (index >= 0 && index < tasksForDay.length) {
       final taskIndex = _allTasks.indexOf(tasksForDay[index]);
       if (taskIndex != -1) {
-        _allTasks[taskIndex].isCompleted = isCompleted;
+        // Create a new PatientTaskModel with updated completion status
+        final oldTask = _allTasks[taskIndex];
+        _allTasks[taskIndex] = PatientTaskModel(
+          title: oldTask.title,
+          isCompleted: isCompleted,
+          date: oldTask.date,
+        );
         notifyListeners();
       }
     }
   }
 
-  int get completedTasksCount =>
-      tasks.where((task) => task.isCompleted).length;
-      
+  int get completedTasksCount => tasks.where((task) => task.isCompleted).length;
   int get totalTasksCount => tasks.length;
 }
