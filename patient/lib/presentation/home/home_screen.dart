@@ -1,8 +1,8 @@
-// home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/home/widgets/home_screen_slider.dart';
 import 'package:patient/presentation/home/widgets/therapy_goal_card.dart';
+import 'package:patient/presentation/operations/therapy_goals.dart';
 import 'package:patient/presentation/reports/report_screen.dart'; // Import the new widget
 
 class HomeScreen extends StatefulWidget {
@@ -41,6 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Expanded(child: _screens[_selectedIndex]),
+
+            // Bottom Navigation Bar
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
@@ -115,26 +117,39 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 25),
           Expanded(
             child: ListView(
-              children: const [
-                LevelIndicator(currentLevel: 5, maxLevel: 18),
-                SizedBox(height: 15),
+              children: [
+                const LevelIndicator(currentLevel: 5, maxLevel: 18),
+                const SizedBox(height: 15),
                 // Using the reusable TherapyGoalCard three times
-                TherapyGoalCard(
-                  title: 'Therapy',
-                  subtitle: 'Goals',
-                  imagePath: 'assets/illustration1.png',
-                  backgroundColor: Color(0xFFF9F3E3),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TherapyGoalsScreen()),
+                    );
+                  },
+                  child: const TherapyGoalCard(
+                    title: 'Therapy',
+                    subtitle: 'Goals',
+                    imagePath: 'assets/illustration1.png',
+                    backgroundColor: Color(0xFFF9F3E3),
+                  ),
                 ),
-                SizedBox(height: 15),
-                TherapyGoalCard(
+                const SizedBox(height: 15),
+                // Daily Activities Card
+
+                const TherapyGoalCard(
                   title: 'Daily',
                   subtitle: 'Activities',
                   imagePath: 'assets/illustration.png',
                   backgroundColor: Color(0xFFFEF4F0),
                   imageOnLeft: true,
                 ),
-                SizedBox(height: 15),
-                TherapyGoalCard(
+
+                const SizedBox(height: 15),
+                // Development Milestones Card
+                const TherapyGoalCard(
                   title: 'Development',
                   subtitle: 'Milestones',
                   imagePath: 'assets/illustration2.png',

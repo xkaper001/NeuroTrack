@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/core/theme/theme.dart';
-import 'package:patient/presentation/home/home_screen.dart';
-import 'package:patient/presentation/splash_screen.dart';
-import 'package:patient/provider/assessment_provider.dart';
 import 'package:patient/provider/reports_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'presentation/splash_screen.dart';
+import 'provider/assessment_provider.dart';
+import 'provider/task_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +31,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AssessmentProvider()),
         ChangeNotifierProvider(create: (_) => ReportsProvider()),
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
       ],
       child: const MyApp(),
     ),
@@ -43,11 +44,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Patient App',
-        theme: AppTheme.lightTheme(),
-        home: const HomeScreen(
-          userName: "Aqib",
-        ));
+      debugShowCheckedModeBanner: false,
+      title: 'Patient App',
+      theme: AppTheme.lightTheme(),
+      home: const SplashScreen(),
+    );
   }
 }
