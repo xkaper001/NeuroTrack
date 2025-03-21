@@ -3,16 +3,29 @@ import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/assessments/assessment_screen.dart';
 import 'package:patient/presentation/assessments/widgets/assessment_card.dart';
 import 'package:patient/provider/assessment_provider.dart';
+import 'package:patient/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-class AssessmentsListScreen extends StatelessWidget {
+class AssessmentsListScreen extends StatefulWidget {
   const AssessmentsListScreen({super.key});
+
+  @override
+  State<AssessmentsListScreen> createState() => _AssessmentsListScreenState();
+}
+
+class _AssessmentsListScreenState extends State<AssessmentsListScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AssessmentProvider>().fetchAllAssessments();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final assessmentProvider =
-        Provider.of<AssessmentProvider>(context, listen: false);
+        Provider.of<AssessmentProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: SafeArea(
@@ -38,23 +51,23 @@ class AssessmentsListScreen extends StatelessWidget {
               Expanded(
                 child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: assessmentProvider.assessments.length,
+                  itemCount: assessmentProvider.allAssessments.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 16),
                   itemBuilder: (context, index) {
-                    final assessment = assessmentProvider.assessments[index];
+                    final assessment = assessmentProvider.allAssessments[index];
                     return AssessmentCard(
                       assessment: assessment,
                       onTap: () {
-                        // Handle assessment selection
-                        //update the assessment id in the provider by using the setAssessmentId method for e.g:
-                        // Provider.of<AssessmentProvider>(context, listen: false)
-                        //     .setAssessmentId(assessment.id);
+                        context.read<AssessmentProvider>().selectedAssessmentId = assessment.assessmentId;
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const AssessmentScreen()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AssessmentScreen(
+                              assessment: assessment,
+                            ),
+                          ),
+                        );
                       },
                     );
                   },

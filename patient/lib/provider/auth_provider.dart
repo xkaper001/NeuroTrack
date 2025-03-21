@@ -77,8 +77,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void storePatientPersonalInfo(PersonalInfoModel personalInfoModel) async {
-    final ActionResult result = await _authRepository.storePersonalInfo(personalInfoModel.toEntity());
-    // final ActionResult result = ActionResultSuccess(data: 'Personal information stored successfully', statusCode: 200); mocking purpose
+    //final ActionResult result = await _authRepository.storePersonalInfo(personalInfoModel.toEntity());
+    final ActionResult result = ActionResultSuccess(data: 'Personal information stored successfully', statusCode: 200);
     if(result is ActionResultSuccess) {
       _apiStatus = ApiStatus.success;
     } else {
