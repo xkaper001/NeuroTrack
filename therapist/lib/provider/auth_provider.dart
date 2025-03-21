@@ -4,12 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io' show Platform;
-import 'package:therapist/presentation/home/home_screen.dart';
 
 class AuthProvider extends ChangeNotifier {
-  
   final supabase = Supabase.instance.client;
-   bool _isAuthenticated = false;
+  bool _isAuthenticated = false;
 
   bool get isAuthenticated => _isAuthenticated;
 
@@ -18,21 +16,21 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signInWithGoogle(BuildContext context) async {
+  Future<void> signInWithGoogle() async {
     try {
       if (kIsWeb) {
-        await _handleWebSignIn(context);
+        await _handleWebSignIn();
       } else {
-        await _handleMobileSignIn(context);
+        await _handleMobileSignIn();
       }
+      _isAuthenticated = true;
+      notifyListeners();
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign in failed: $error')),
-      );
+      throw Exception('Sign in failed: $error');
     }
   }
 
-  Future<void> _handleWebSignIn(BuildContext context) async {
+  Future<void> _handleWebSignIn() async {
     final supabaseUrl = dotenv.env['SUPABASE_URL'] ??
         (throw Exception("Supabase URL not found in .env"));
 
@@ -41,11 +39,9 @@ class AuthProvider extends ChangeNotifier {
       redirectTo: "$supabaseUrl/auth/v1/callback",
       authScreenLaunchMode: LaunchMode.platformDefault,
     );
-
-    _handlePostSignIn(context);
   }
 
-  Future<void> _handleMobileSignIn(BuildContext context) async {
+  Future<void> _handleMobileSignIn() async {
     final webClientId = dotenv.env['GOOGLE_WEB_CLIENT_ID'] ??
         (throw Exception("WEB_CLIENT_ID not found in .env"));
     final iosClientId = dotenv.env['GOOGLE_IOS_CLIENT_ID'];
@@ -70,28 +66,11 @@ class AuthProvider extends ChangeNotifier {
       idToken: googleAuth.idToken!,
       accessToken: googleAuth.accessToken,
     );
-
-    _handlePostSignIn(context);
   }
 
-  void _handlePostSignIn(BuildContext context) {
+  String? getFullName() {
     final session = supabase.auth.currentSession;
-    if (session == null) return;
-
-    final userMetadata = session.user.userMetadata;
-    final fullName = userMetadata?['full_name'] ?? 'User';
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Welcome $fullName!'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
-      ),
-    );
+    if (session == null) return null;
+    return session.user.userMetadata?['full_name'] ?? 'User';
   }
 }
