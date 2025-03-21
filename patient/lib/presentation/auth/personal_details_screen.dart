@@ -1,7 +1,10 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:patient/presentation/home/home_screen.dart';
-import 'package:patient/presentation/home/home_screen_slider.dart';
+import 'package:patient/core/core.dart';
+import 'package:patient/model/auth_models/personal_info_model.dart';
+import 'package:patient/presentation/assessments/assessments_list_screen.dart';
+import 'package:patient/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   const PersonalDetailsScreen({super.key});
@@ -31,28 +34,78 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, String?> _validationErrors = {};
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(!mounted) {
+        return;
+      }
+      final authProvider = context.read<AuthProvider>();
+
+      void showErrorSnackBar(String errorMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            errorMessage,
+          ),
+        ));
+      }
+
+      if(authProvider.apiStatus.isSuccess) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const AssessmentsListScreen(),
+          ),
+        );
+      } else if(authProvider.apiStatus.isFailure) {
+        showErrorSnackBar(authProvider.apiErrorMessage);
+        authProvider.resetApiStatus();
+      }
+    });
+
+  }
+
+
+  PersonalInfoModel get getPersonalInfo {
+
+    int parseAge(String age) {
+      return int.tryParse(age) ?? 0;
+    }
+
+    bool isAdult(String age) {
+      return parseAge(age) >= 18;
+    }
+
+    return PersonalInfoModel(
+      patientId: '',
+      patientName: isAssessmentForChild
+          ? childNameController.text
+          : adultNameController.text,
+      age: isAssessmentForChild ? parseAge(childAgeController.text) : parseAge(adultAgeController.text),
+      isAdult: isAssessmentForChild ? isAdult(childAgeController.text) : isAdult(adultAgeController.text),
+      phoneNo: phoneController.text,
+      email: '',
+      guardianName: isAssessmentForChild ? adultNameController.text : '',
+      guardianRelation: isAssessmentForChild ? guardianPhoneController.text : phoneController.text,
+      country: selectedCountry?.displayName ?? '',
+      gender: isAssessmentForChild ? selectedChildGender ?? '' : selectedGender ?? '',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Provider.of<AuthProvider>(context, listen: true).apiStatus;
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
         child: FilledButton(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
-              String userName = isAssessmentForChild ? childNameController.text : adultNameController.text;
-              if (isAssessmentForChild) {
-                // TODO: Call Child API and route accordingly
-              } else {
-                // TODO: Call Adult API and route accordingly
-              }
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(userName: userName),
-            //       builder: (context) => AutismLevelSlider(currentLevel: 1, // Replace with dynamic data from backend
-            // maxLevel: 10,),
-                ),
-              );
-              
+              final personalInfoModel = getPersonalInfo;
+              final authProvider = context.read<AuthProvider>();
+              authProvider.storePatientPersonalInfo(personalInfoModel);
             }
           },
           child: const Text(
