@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:therapist/presentation/splash_screen.dart';
 
 import './presentation/auth/auth_screen.dart';
+
 import './provider/auth_provider.dart';
 import './provider/home_provider.dart';
 import './provider/therapist_provider.dart';
@@ -37,6 +39,7 @@ Future<void> main() async {
       child: const MyApp(),
     ),
   );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
