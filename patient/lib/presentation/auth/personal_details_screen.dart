@@ -1,3 +1,5 @@
+
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:patient/presentation/home/home_screen.dart';
@@ -48,8 +50,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => HomeScreen(userName: userName),
-            //       builder: (context) => AutismLevelSlider(currentLevel: 1, // Replace with dynamic data from backend
-            // maxLevel: 10,),
+            
                 ),
               );
               
@@ -150,7 +151,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter your phone number';
             }
-            // Simple regex for phone validation
+          
             if (!RegExp(r'^\+?[0-9]{10,15}$')
                 .hasMatch(value.replaceAll(RegExp(r'\s+'), ''))) {
               return 'Please enter a valid phone number';
@@ -327,7 +328,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter your phone number';
             }
-            // Simple regex for phone validation
+            
             if (!RegExp(r'^\+?[0-9]{10,15}$')
                 .hasMatch(value.replaceAll(RegExp(r'\s+'), ''))) {
               return 'Please enter a valid phone number';
