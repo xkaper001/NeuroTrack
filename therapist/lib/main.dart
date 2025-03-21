@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../presentation/home/home_screen.dart';
+import 'package:therapist/core/theme/theme.dart';
 import './provider/session_provider.dart';
 import './provider/auth_provider.dart';
 import './provider/home_provider.dart';
 import './provider/therapist_provider.dart';
+import './provider/consultation_provider.dart';
+import './repository/supabase_consultation_repository.dart';
+import './presentation/home/home_screen.dart';
+import './presentation/widget/splash_screen.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -14,6 +18,12 @@ void main() {
       statusBarIconBrightness: Brightness.dark,
     ),
   );
+  
+  // Create the repository for consultations
+  final consultationRepository = SupabaseConsultationRepository(
+    supabaseClient: null,
+  );
+  
   runApp(const MyApp());
 }
 
@@ -28,17 +38,29 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => HomeProvider()),
         ChangeNotifierProvider(create: (context) => TherapistDataProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Therapist Dashboard',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: Colors.grey[50],
-          fontFamily: 'SF Pro Display',
+        // Add the consultation provider
+        ChangeNotifierProvider(
+          create: (context) => ConsultationProvider(
+            SupabaseConsultationRepository(supabaseClient: null),
+          )..fetchConsultationRequests(),
         ),
-        home: const HomeScreen(),
-      ),
+      ],
+      child: TherapyApp(),
+    );
+  );
+}
+
+class TherapyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Get authentication state
+    final authProvider = Provider.of<AuthProvider>(context);
+    
+    return MaterialApp(
+      title: 'Therapist Dashboard',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme(), // Using your theme
+      home: authProvider.isAuthenticated ? const HomeScreen() : SplashScreen(),
     );
   }
 }
