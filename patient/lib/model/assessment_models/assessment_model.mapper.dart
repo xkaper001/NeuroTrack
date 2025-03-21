@@ -42,6 +42,9 @@ class AssessmentModelMapper extends ClassMapperBase<AssessmentModel> {
       v.questions;
   static const Field<AssessmentModel, List<AssessmentQuestionModel>>
       _f$questions = Field('questions', _$questions);
+  static String _$imageUrl(AssessmentModel v) => v.imageUrl;
+  static const Field<AssessmentModel, String> _f$imageUrl =
+      Field('imageUrl', _$imageUrl, key: r'image_url');
 
   @override
   final MappableFields<AssessmentModel> fields = const {
@@ -52,6 +55,7 @@ class AssessmentModelMapper extends ClassMapperBase<AssessmentModel> {
     #category: _f$category,
     #cutoffScore: _f$cutoffScore,
     #questions: _f$questions,
+    #imageUrl: _f$imageUrl,
   };
 
   static AssessmentModel _instantiate(DecodingData data) {
@@ -62,7 +66,8 @@ class AssessmentModelMapper extends ClassMapperBase<AssessmentModel> {
         description: data.dec(_f$description),
         category: data.dec(_f$category),
         cutoffScore: data.dec(_f$cutoffScore),
-        questions: data.dec(_f$questions));
+        questions: data.dec(_f$questions),
+        imageUrl: data.dec(_f$imageUrl));
   }
 
   @override
@@ -130,7 +135,8 @@ abstract class AssessmentModelCopyWith<$R, $In extends AssessmentModel, $Out>
       String? description,
       String? category,
       int? cutoffScore,
-      List<AssessmentQuestionModel>? questions});
+      List<AssessmentQuestionModel>? questions,
+      String? imageUrl});
   AssessmentModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -160,7 +166,8 @@ class _AssessmentModelCopyWithImpl<$R, $Out>
           String? description,
           String? category,
           int? cutoffScore,
-          List<AssessmentQuestionModel>? questions}) =>
+          List<AssessmentQuestionModel>? questions,
+          String? imageUrl}) =>
       $apply(FieldCopyWithData({
         if (assessmentId != null) #assessmentId: assessmentId,
         if (createdAt != null) #createdAt: createdAt,
@@ -168,7 +175,8 @@ class _AssessmentModelCopyWithImpl<$R, $Out>
         if (description != null) #description: description,
         if (category != null) #category: category,
         if (cutoffScore != null) #cutoffScore: cutoffScore,
-        if (questions != null) #questions: questions
+        if (questions != null) #questions: questions,
+        if (imageUrl != null) #imageUrl: imageUrl
       }));
   @override
   AssessmentModel $make(CopyWithData data) => AssessmentModel(
@@ -178,7 +186,8 @@ class _AssessmentModelCopyWithImpl<$R, $Out>
       description: data.get(#description, or: $value.description),
       category: data.get(#category, or: $value.category),
       cutoffScore: data.get(#cutoffScore, or: $value.cutoffScore),
-      questions: data.get(#questions, or: $value.questions));
+      questions: data.get(#questions, or: $value.questions),
+      imageUrl: data.get(#imageUrl, or: $value.imageUrl));
 
   @override
   AssessmentModelCopyWith<$R2, AssessmentModel, $Out2> $chain<$R2, $Out2>(

@@ -38,6 +38,9 @@ class AssessmentEntityMapper extends ClassMapperBase<AssessmentEntity> {
   static int _$cutoffScore(AssessmentEntity v) => v.cutoffScore;
   static const Field<AssessmentEntity, int> _f$cutoffScore =
       Field('cutoffScore', _$cutoffScore, key: r'cutoff_score');
+  static String _$imageUrl(AssessmentEntity v) => v.imageUrl;
+  static const Field<AssessmentEntity, String> _f$imageUrl =
+      Field('imageUrl', _$imageUrl, key: r'image_url');
   static List<AssessmentQuestionEntity> _$questions(AssessmentEntity v) =>
       v.questions;
   static const Field<AssessmentEntity, List<AssessmentQuestionEntity>>
@@ -51,6 +54,7 @@ class AssessmentEntityMapper extends ClassMapperBase<AssessmentEntity> {
     #description: _f$description,
     #category: _f$category,
     #cutoffScore: _f$cutoffScore,
+    #imageUrl: _f$imageUrl,
     #questions: _f$questions,
   };
 
@@ -62,6 +66,7 @@ class AssessmentEntityMapper extends ClassMapperBase<AssessmentEntity> {
         description: data.dec(_f$description),
         category: data.dec(_f$category),
         cutoffScore: data.dec(_f$cutoffScore),
+        imageUrl: data.dec(_f$imageUrl),
         questions: data.dec(_f$questions));
   }
 
@@ -131,6 +136,7 @@ abstract class AssessmentEntityCopyWith<$R, $In extends AssessmentEntity, $Out>
       String? description,
       String? category,
       int? cutoffScore,
+      String? imageUrl,
       List<AssessmentQuestionEntity>? questions});
   AssessmentEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -161,6 +167,7 @@ class _AssessmentEntityCopyWithImpl<$R, $Out>
           String? description,
           String? category,
           int? cutoffScore,
+          String? imageUrl,
           List<AssessmentQuestionEntity>? questions}) =>
       $apply(FieldCopyWithData({
         if (assessmentId != null) #assessmentId: assessmentId,
@@ -169,6 +176,7 @@ class _AssessmentEntityCopyWithImpl<$R, $Out>
         if (description != null) #description: description,
         if (category != null) #category: category,
         if (cutoffScore != null) #cutoffScore: cutoffScore,
+        if (imageUrl != null) #imageUrl: imageUrl,
         if (questions != null) #questions: questions
       }));
   @override
@@ -179,6 +187,7 @@ class _AssessmentEntityCopyWithImpl<$R, $Out>
       description: data.get(#description, or: $value.description),
       category: data.get(#category, or: $value.category),
       cutoffScore: data.get(#cutoffScore, or: $value.cutoffScore),
+      imageUrl: data.get(#imageUrl, or: $value.imageUrl),
       questions: data.get(#questions, or: $value.questions));
 
   @override

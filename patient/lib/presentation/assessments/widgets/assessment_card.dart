@@ -50,12 +50,12 @@ class AssessmentCard extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    // const Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     AssessmentIcon(icon: '',),
-                    //   ],
-                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AssessmentIcon(icon: assessment.imageUrl,),
+                      ],
+                    ),
                   ],
                 ),
               ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:patient/presentation/assessments/models/assessment_card_model.dart';
 
 class AssessmentIcon extends StatelessWidget {
   final String icon;
@@ -11,7 +10,7 @@ class AssessmentIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
+    return Image.network(
       icon,
       width: 80,
       height: 80,

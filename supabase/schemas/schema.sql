@@ -79,6 +79,7 @@ CREATE TABLE assessments (
   description TEXT,
   category TEXT,
   cutoff_score INT2,
+  image_url TEXT,
   questions JSONB NOT NULL
 );
 

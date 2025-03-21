@@ -24,6 +24,9 @@ class AssessmentModel with AssessmentModelMappable {
   @MappableField(key: 'cutoff_score')
   final int cutoffScore;
 
+  @MappableField(key: 'image_url')
+  final String imageUrl;
+
   @MappableField(key: 'questions')
   final List<AssessmentQuestionModel> questions;
 
@@ -35,6 +38,7 @@ class AssessmentModel with AssessmentModelMappable {
     required this.category,
     required this.cutoffScore,
     required this.questions,
+    required this.imageUrl,
   });
   
 }
