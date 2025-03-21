@@ -4,6 +4,7 @@ import 'package:patient/presentation/home/widgets/home_screen_slider.dart';
 import 'package:patient/presentation/home/widgets/therapy_goal_card.dart';
 import 'package:patient/presentation/operations/therapy_goals.dart';
 import 'package:patient/presentation/reports/report_screen.dart'; // Import the new widget
+import 'package:patient/presentation/notification/updates_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _buildHomeContent(),
       const ReportsScreen(),
       _buildCalendarContent(),
-      _buildNotificationsContent(),
+      UpdatesScreen(),
       _buildProfileContent(),
     ];
   }
@@ -170,10 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Text('Calendar Screen', style: TextStyle(fontSize: 24)));
   }
 
-  Widget _buildNotificationsContent() {
-    return const Center(
-        child: Text('Notifications Screen', style: TextStyle(fontSize: 24)));
-  }
+
 
   Widget _buildProfileContent() {
     return const Center(
