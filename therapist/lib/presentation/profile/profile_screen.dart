@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
+import '../widget/profile_option.dart'; // Fixed double slash
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +22,6 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Profile Title
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(16.0),
@@ -38,64 +34,67 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Profile Info Section with slight purple background
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Container(
                 padding: const EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF2EAF5), // Slight purple background
+                  color: const Color(0xFFF2EAF5),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 constraints: const BoxConstraints(minHeight: 160),
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child: Row(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 35,
                       backgroundImage: AssetImage('assets/rohit.png'),
                     ),
-                    SizedBox(width: 30),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Mohammed Mohsin",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+
+                    /// **Wrap Column with Expanded to prevent overflow**
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Mohammed Mohsin",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis, // Prevents text overflow
                           ),
-                        ),
-                        SizedBox(height: 6),
-                        Text(
-                          "mohsin@gmail.com",
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                        Text(
-                          "+91 1234567890",
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ],
+                          Text(
+                            "mohsin@gmail.com",
+                            style: const TextStyle(fontSize: 16, color: Colors.grey),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "+91 1234567890",
+                            style: const TextStyle(fontSize: 16, color: Colors.grey),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
 
-            // Explicit white background below profile section
+            /// **Ensure the rest of the content fits properly**
             Expanded(
               child: Container(
-                color: Colors.white, // Ensures the background below is white
+                color: Colors.white,
                 child: SingleChildScrollView(
                   child: Column(
-                    children: [
-                      _buildProfileOption("About Us"),
-                      _buildProfileOption("Terms & Conditions"),
-                      _buildProfileOption("Privacy Policy"),
-                      _buildProfileOption("Contact Admin"),
-                      _buildProfileOption("Log Out", isLogout: true),
+                    children: const [
+                      ProfileOption(title: "About Us"),
+                      ProfileOption(title: "Terms & Conditions"),
+                      ProfileOption(title: "Privacy Policy"),
+                      ProfileOption(title: "Contact Admin"),
+                      ProfileOption(title: "Log Out", isLogout: true),
                     ],
                   ),
                 ),
@@ -104,30 +103,6 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildProfileOption(String title, {bool isLogout = false}) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              color: isLogout ? Colors.red : Colors.black,
-              fontWeight: isLogout ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 18),
-          onTap: () {},
-        ),
-        if (!isLogout)
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Divider(height: 2, thickness: 1),
-          ),
-      ],
     );
   }
 }
