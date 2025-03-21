@@ -1,3 +1,5 @@
+
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +8,7 @@ import '../widgets/welcome_header.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/presentation/auth/personal_details_screen.dart';
+
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -115,6 +118,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   },
                   itemBuilder: (context, index) => _buildCarouselItem(_contents[index]),
                 ),
+
                 Positioned(
                   bottom: 120,
                   left: 0,
@@ -127,6 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 ),
+
                 const Positioned(
                   bottom: 40,
                   left: 0,
@@ -169,6 +174,7 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ),
         const SizedBox(height: 60),
+
       ],
     );
   }
