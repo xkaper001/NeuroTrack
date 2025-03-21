@@ -33,5 +33,32 @@ class SupabaseAuthRepository implements AuthRepository {
       );
     }
   }
+  
+  @override
+  Future<ActionResult> checkIfPatientExists() async {
+    try {
+      final response = await _supabaseClient.from('patient')
+        .select('*')
+        .eq('id', _supabaseClient.auth.currentUser!.id)
+        .maybeSingle();
+      
+      if(response != null) {
+        return ActionResultSuccess(
+          data: true,
+          statusCode: 200
+        );
+      } else {
+        return ActionResultSuccess(
+          data: false,
+          statusCode: 400
+        );
+      }
+    } catch(e) {
+      return ActionResultFailure(
+        errorMessage: e.toString(),
+        statusCode: 400,
+      );
+    }
+  }
 
 }

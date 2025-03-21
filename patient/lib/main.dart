@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/splash_screen.dart';
 import 'package:patient/provider/assessment_provider.dart';
+import 'package:patient/provider/auth_provider.dart';
+import 'package:patient/repository/supabase_auth_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -28,6 +30,13 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AssessmentProvider()),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(
+            authRepository: SupabaseAuthRepository(
+              supabaseClient: Supabase.instance.client,
+            ),
+          ),
+        ),
       ],
       child: const MyApp(),
     ),

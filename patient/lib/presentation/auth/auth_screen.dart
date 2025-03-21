@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:patient/presentation/auth/personal_details_screen.dart';
+import 'package:patient/presentation/home/home_screen.dart';
+import 'package:patient/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 import '../widgets/google_signin_button.dart';
 import '../widgets/welcome_header.dart';
 
@@ -15,6 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
   late Timer _timer;
+  bool hasNavigated = false;
 
   final List<OnboardingContent> _contents = [
     OnboardingContent(
@@ -63,7 +68,60 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPersistentFrameCallback((_) {
+      if(!mounted) {
+        return;
+      }
+      
+      final authProvider = context.read<AuthProvider>();
+      final AuthNavigationStatus navigationStatus = authProvider.navigationStatus;
+
+      void showSignInError(String error) {
+        // TODO: create a genric method to show snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+          ),
+        );
+      }
+
+      if(!hasNavigated && !navigationStatus.isUnknown) {
+        if (navigationStatus.isError) {
+          showSignInError(authProvider.signInErrorMessage);
+          authProvider.resetStateInFailure();
+          return;
+        }
+        hasNavigated = true;
+        _handleNavigation(navigationStatus);
+      }
+    });
+  }
+
+  void _handleNavigation(AuthNavigationStatus status) {
+    Widget nextScreen;
+
+    if (status.isHome) {
+      nextScreen = const HomeScreen(userName: 'Mohd Jasir Khan');
+    } else if (status.isPersonalDetails) {
+      nextScreen = const PersonalDetailsScreen();
+    } else {
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => nextScreen),
+    );
+  }
+
+  void _signInWithGoogle() {
+    Provider.of<AuthProvider>(context,listen: false).signInWithGoogle();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Provider.of<AuthProvider>(context,listen: true);
     return Scaffold(
       body: Column(
         children: [
@@ -103,11 +161,13 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
 
                 // Google Sign-in Button
-                const Positioned(
+                Positioned(
                   bottom: 40,
                   left: 0,
                   right: 0,
-                  child: GoogleSignInButton(),
+                  child: GoogleSignInButton(
+                    onPressed: () => _signInWithGoogle(),
+                  ),
                 ),
               ],
             ),
