@@ -44,7 +44,7 @@ jobs:
           flutter-version: "3.27.4"
           channel: "stable"
       - name: Touch .env
-        run: cd patient && touch .env
+        run: cd therapist && touch .env
       - name: Running pub get to fetch dependencies
         run: cd therapist && flutter pub get
       - name: Building for android
@@ -61,6 +61,6 @@ jobs:
           channel: "stable"
           architecture: x64
       - name: Touch .env
-        run: cd patient && touch .env
+        run: cd therapist && touch .env
       - name: Building for ios
         run: cd therapist && flutter build ios --release --no-codesign
