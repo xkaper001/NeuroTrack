@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:patient/core/core.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:patient/model/assessment_models/assessment_models.dart';
-import 'package:patient/model/assessment_models/assessment_question_answer_model.dart';
 import 'package:patient/provider/assessment_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,31 @@ class AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final assessmentProvider = context.read<AssessmentProvider>();
+      if(assessmentProvider.submitAssessmentStatus.isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${assessmentProvider.assessmentResultModel?.message}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else if(assessmentProvider.submitAssessmentStatus.isFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Something went wrong. Please try again later.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Provider.of<AssessmentProvider>(context, listen: true).submitAssessmentStatus;
     return Scaffold(
       body: SafeArea(
         child: Consumer<AssessmentProvider>(

@@ -1,12 +1,16 @@
+
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/presentation/auth/personal_details_screen.dart';
 import 'package:patient/presentation/home/home_screen.dart';
+import 'package:patient/presentation/widgets/google_signin_button.dart';
 import 'package:patient/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
-import '../widgets/google_signin_button.dart';
 import '../widgets/welcome_header.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -20,19 +24,21 @@ class _AuthScreenState extends State<AuthScreen> {
   int _currentPage = 0;
   late Timer _timer;
   bool hasNavigated = false;
+  final supabase = Supabase.instance.client;
+  StreamSubscription<AuthState>? _authSubscription;
 
   final List<OnboardingContent> _contents = [
-    OnboardingContent(
+    const OnboardingContent(
       image: 'assets/illustration.png',
       title: 'Daily Activities',
       description: 'Personalized Daily Activities, Tracked Effortlessly!',
     ),
-    OnboardingContent(
+    const OnboardingContent(
       image: 'assets/illustration1.png',
-      title: 'Therapy Goals ',
-      description: 'Personalized Daily Activities, Tracked Effortlessly!',
+      title: 'Therapy Goals',
+      description: 'Set and achieve your therapy goals with ease!',
     ),
-    OnboardingContent(
+    const OnboardingContent(
       image: 'assets/illustration2.png',
       title: 'Health Tracking',
       description: 'Monitor your health metrics with ease and accuracy!',
@@ -43,6 +49,31 @@ class _AuthScreenState extends State<AuthScreen> {
   void initState() {
     super.initState();
     _startAutoScroll();
+    _initializeAuthListener();
+  }
+
+  void _initializeAuthListener() {
+    _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
+      final session = supabase.auth.currentSession;
+      if (session != null && mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _handleSuccessfulAuth(session);
+        });
+      }
+    });
+  }
+
+  void _handleSuccessfulAuth(Session session) {
+    final fullName = session.user.userMetadata?['full_name'];
+    final email = session.user.email ?? 'Unknown User';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Signed in as ${fullName ?? email}'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+    context.read<AuthProvider>().checkIfPatientExists();
   }
 
   void _startAutoScroll() {
@@ -50,7 +81,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (_currentPage < _contents.length - 1) {
         _currentPage++;
       } else {
-        _currentPage = 0; // Reset to first page when reaching the end
+        _currentPage = 0;
       }
       _pageController.animateToPage(
         _currentPage,
@@ -64,89 +95,58 @@ class _AuthScreenState extends State<AuthScreen> {
   void dispose() {
     _pageController.dispose();
     _timer.cancel();
+    _authSubscription?.cancel();
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    WidgetsBinding.instance.addPersistentFrameCallback((_) {
-      if(!mounted) {
-        return;
-      }
-      
-      final authProvider = context.read<AuthProvider>();
-      final AuthNavigationStatus navigationStatus = authProvider.navigationStatus;
 
-      void showSignInError(String error) {
-        // TODO: create a genric method to show snackbar
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = context.read<AuthProvider>();
+      Widget? nextScreen;
+
+      if (authProvider.authNavigationStatus.isHome) {
+        nextScreen = const HomeScreen(userName: 'Mohd Jasir Khan');
+      } else if (authProvider.authNavigationStatus.isPersonalDetails) {
+        nextScreen = const PersonalDetailsScreen();
+      } else if(authProvider.authNavigationStatus.isError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error),
+          const SnackBar(
+            content: Text('An error occurred. Please try again.'),
+            duration: Duration(seconds: 2),
           ),
         );
+        return;
       }
 
-      if(!hasNavigated && !navigationStatus.isUnknown) {
-        if (navigationStatus.isError) {
-          showSignInError(authProvider.signInErrorMessage);
-          authProvider.resetStateInFailure();
-          return;
-        }
-        hasNavigated = true;
-        _handleNavigation(navigationStatus);
+      if (nextScreen != null) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => nextScreen!));
       }
     });
   }
 
-  void _handleNavigation(AuthNavigationStatus status) {
-    Widget nextScreen;
-
-    if (status.isHome) {
-      nextScreen = const HomeScreen(userName: 'Mohd Jasir Khan');
-    } else if (status.isPersonalDetails) {
-      nextScreen = const PersonalDetailsScreen();
-    } else {
-      return;
-    }
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => nextScreen),
-    );
-  }
-
-  void _signInWithGoogle() {
-    Provider.of<AuthProvider>(context,listen: false).signInWithGoogle();
-  }
-
   @override
   Widget build(BuildContext context) {
-    Provider.of<AuthProvider>(context,listen: true);
+    Provider.of<AuthProvider>(context, listen: true).authNavigationStatus;
     return Scaffold(
       body: Column(
         children: [
-          // Custom Welcome Header
           const WelcomeHeader(),
-
-          // Carousel and bottom content
           Expanded(
             child: Stack(
               children: [
-                // PageView for carousel
                 PageView.builder(
                   controller: _pageController,
                   itemCount: _contents.length,
                   onPageChanged: (int page) {
-                    setState(() {
-                      _currentPage = page;
-                    });
+                    setState(() => _currentPage = page);
                   },
-                  itemBuilder: (context, index) {
-                    return _buildCarouselItem(_contents[index]);
-                  },
+                  itemBuilder: (context, index) => _buildCarouselItem(_contents[index]),
                 ),
 
-                // Pagination dots
                 Positioned(
                   bottom: 120,
                   left: 0,
@@ -166,7 +166,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   left: 0,
                   right: 0,
                   child: GoogleSignInButton(
-                    onPressed: () => _signInWithGoogle(),
+                    onPressed: () => context.read<AuthProvider>().signInWithGoogle(),
                   ),
                 ),
               ],
@@ -181,7 +181,6 @@ class _AuthScreenState extends State<AuthScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Illustration
         Image.asset(content.image, height: 200),
         const SizedBox(height: 35),
         Text(
@@ -205,7 +204,8 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 60), // Space for dots and button
+        const SizedBox(height: 60),
+
       ],
     );
   }
@@ -224,13 +224,12 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 }
 
-// Model class for onboarding content
 class OnboardingContent {
   final String image;
   final String title;
   final String description;
 
-  OnboardingContent({
+  const OnboardingContent({
     required this.image,
     required this.title,
     required this.description,

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:patient/core/result/result.dart';
-import 'package:patient/model/assessment_models/assessment_answer_model.dart';
+import 'package:patient/core/core.dart';
 import 'package:patient/model/assessment_models/assessment_models.dart';
-import 'package:patient/model/assessment_models/assessment_question_answer_model.dart';
-import 'package:patient/presentation/assessments/models/assessment_card_model.dart';
 import 'package:patient/repository/supabase_assessments_repository.dart';
 
 class AssessmentProvider with ChangeNotifier {
@@ -22,6 +18,14 @@ class AssessmentProvider with ChangeNotifier {
   AssessmentAnswerModel _assessmentAnswerModel = AssessmentAnswerModel(questions: [], assessmentId: '');
 
   AssessmentAnswerModel? get assessmentAnswerModel => _assessmentAnswerModel;
+
+  ApiStatus _submitAssessmentStatus = ApiStatus.initial;  
+
+  ApiStatus get submitAssessmentStatus => _submitAssessmentStatus;
+
+  AssessmentResultModel? _assessmentResultModel;
+
+  AssessmentResultModel? get assessmentResultModel => _assessmentResultModel;
 
 
   set assessmentAnswers(AssessmentQuestionAnswerModel answers) { 
@@ -52,7 +56,16 @@ class AssessmentProvider with ChangeNotifier {
 
   //implement the submitAssessment method to submit the assessment when the submitted_assessment table is created
   Future<void> submitAssessment() async {
+    _submitAssessmentStatus = ApiStatus.initial;
+    notifyListeners();
     final result = await _repository.submitAssessment(_assessmentAnswerModel.toEntity());
+    if (result is ActionResultSuccess) {
+      _submitAssessmentStatus = ApiStatus.success;
+      _assessmentResultModel = result.data;
+    } else {
+      _submitAssessmentStatus = ApiStatus.failure;
+    }
+    notifyListeners();
   }
 
 }

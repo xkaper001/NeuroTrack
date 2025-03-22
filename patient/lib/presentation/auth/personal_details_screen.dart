@@ -61,7 +61,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         );
       } else if(authProvider.apiStatus.isFailure) {
         showErrorSnackBar(authProvider.apiErrorMessage);
-        authProvider.resetApiStatus();
+        //authProvider.resetApiStatus();
       }
     });
 
@@ -203,7 +203,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter your phone number';
             }
-            // Simple regex for phone validation
+
             if (!RegExp(r'^\+?[0-9]{10,15}$')
                 .hasMatch(value.replaceAll(RegExp(r'\s+'), ''))) {
               return 'Please enter a valid phone number';
@@ -280,7 +280,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       const SizedBox(width: 10),
                       Text(
                         selectedCountry?.name ?? '',
-                        style: const TextStyle(fontSize: 15, color: Colors.black,),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
                       ),
                       const Spacer(),
                       Icon(
@@ -339,11 +342,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (age == null || age <= 0) {
               return 'Please enter a valid age';
             }
-            return null;  
+            return null;
           },
-        ), 
+        ),
         const SizedBox(height: 20),
-            _buildDropDown(
+        _buildDropDown(
             headerText: '  Relation with patient',
             initialSelection: '',
             dropdownItems: [
@@ -368,7 +371,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 selectedChildGender = value;
               });
             }),
-        
         const SizedBox(height: 20),
         _buildTextField(
           fieldName: 'guardianPhone',
@@ -380,7 +382,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             if (value == null || value.isEmpty) {
               return 'Please enter your phone number';
             }
-            // Simple regex for phone validation
+
             if (!RegExp(r'^\+?[0-9]{10,15}$')
                 .hasMatch(value.replaceAll(RegExp(r'\s+'), ''))) {
               return 'Please enter a valid phone number';

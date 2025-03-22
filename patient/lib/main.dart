@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/core/theme/theme.dart';
+
 import 'package:patient/presentation/splash_screen.dart';
 import 'package:patient/provider/assessment_provider.dart';
 import 'package:patient/provider/auth_provider.dart';
 import 'package:patient/repository/supabase_auth_repository.dart';
+
+import 'package:patient/provider/reports_provider.dart';
+
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'provider/task_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +42,9 @@ Future<void> main() async {
             ),
           ),
         ),
+        ChangeNotifierProvider(create: (_) => ReportsProvider()),
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+
       ],
       child: const MyApp(),
     ),
