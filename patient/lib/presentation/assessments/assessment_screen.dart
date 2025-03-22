@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:patient/core/core.dart';
 import 'package:patient/core/theme/theme.dart';
 import 'package:patient/model/assessment_models/assessment_models.dart';
+import 'package:patient/presentation/widgets/snackbar_service.dart';
 import 'package:patient/provider/assessment_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -29,19 +30,9 @@ class AssessmentScreenState extends State<AssessmentScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final assessmentProvider = context.read<AssessmentProvider>();
       if(assessmentProvider.submitAssessmentStatus.isSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${assessmentProvider.assessmentResultModel?.message}'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        SnackbarService.showSuccess('${assessmentProvider.assessmentResultModel?.message}');
       } else if(assessmentProvider.submitAssessmentStatus.isFailure) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Something went wrong. Please try again later.'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        SnackbarService.showError('Something went wrong. Please try again later.');
       }
     });
   }

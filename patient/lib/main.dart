@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:patient/core/theme/theme.dart';
 
 import 'package:patient/presentation/splash_screen.dart';
+import 'package:patient/presentation/widgets/snackbar_service.dart';
 import 'package:patient/provider/assessment_provider.dart';
 import 'package:patient/provider/auth_provider.dart';
 import 'package:patient/repository/supabase_auth_repository.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: SnackbarService.scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       title: 'Patient App',
       theme: AppTheme.lightTheme(),

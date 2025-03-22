@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:patient/core/core.dart';
 import 'package:patient/model/auth_models/personal_info_model.dart';
 import 'package:patient/presentation/assessments/assessments_list_screen.dart';
+import 'package:patient/presentation/widgets/snackbar_service.dart';
 import 'package:patient/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -46,11 +47,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       final authProvider = context.read<AuthProvider>();
 
       void showErrorSnackBar(String errorMessage) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            errorMessage,
-          ),
-        ));
+        SnackbarService.showError(errorMessage);
       }
 
       if(authProvider.apiStatus.isSuccess) {

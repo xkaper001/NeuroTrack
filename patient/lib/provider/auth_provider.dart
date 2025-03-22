@@ -124,8 +124,8 @@ class AuthProvider extends ChangeNotifier {
     _apiStatus = ApiStatus.initial;
     _apiErrorMessage = '';
     notifyListeners();
-    //final ActionResult result = await _authRepository.storePersonalInfo(personalInfoModel.toEntity());
-    final ActionResult result = ActionResultSuccess(data: 'Personal information stored successfully', statusCode: 200);
+    final ActionResult result = await _authRepository.storePersonalInfo(personalInfoModel.toEntity());
+    // final ActionResult result = ActionResultSuccess(data: 'Personal information stored successfully', statusCode: 200);
     if(result is ActionResultSuccess) {
       _apiStatus = ApiStatus.success;
     } else {

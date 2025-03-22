@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:patient/presentation/auth/personal_details_screen.dart';
 import 'package:patient/presentation/home/home_screen.dart';
 import 'package:patient/presentation/widgets/google_signin_button.dart';
+import 'package:patient/presentation/widgets/snackbar_service.dart';
 import 'package:patient/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../widgets/welcome_header.dart';
@@ -67,12 +68,7 @@ class _AuthScreenState extends State<AuthScreen> {
     final fullName = session.user.userMetadata?['full_name'];
     final email = session.user.email ?? 'Unknown User';
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Signed in as ${fullName ?? email}'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    SnackbarService.showSuccess('Signed in as ${fullName ?? email}');
     context.read<AuthProvider>().checkIfPatientExists();
   }
 
@@ -108,16 +104,12 @@ class _AuthScreenState extends State<AuthScreen> {
       Widget? nextScreen;
 
       if (authProvider.authNavigationStatus.isHome) {
-        nextScreen = const HomeScreen(userName: 'Mohd Jasir Khan');
+        final userName = supabase.auth.currentSession?.user.userMetadata?['full_name'];
+        nextScreen = HomeScreen(userName: userName ?? 'User');
       } else if (authProvider.authNavigationStatus.isPersonalDetails) {
         nextScreen = const PersonalDetailsScreen();
       } else if(authProvider.authNavigationStatus.isError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred. Please try again.'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        SnackbarService.showError('An error occurred. Please try again.');
         return;
       }
 
