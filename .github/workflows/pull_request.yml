@@ -1,7 +1,6 @@
 name: PR Workflow
 on:
   pull_request:
-  workflow_dispatch:
 
 jobs: 
   Android-Build-Patient:
