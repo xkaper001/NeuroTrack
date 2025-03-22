@@ -58,7 +58,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         );
       } else if(authProvider.apiStatus.isFailure) {
         showErrorSnackBar(authProvider.apiErrorMessage);
-        //authProvider.resetApiStatus();
       }
     });
 

@@ -3,7 +3,6 @@ import 'package:patient/core/theme/theme.dart';
 import 'package:patient/presentation/assessments/assessment_screen.dart';
 import 'package:patient/presentation/assessments/widgets/assessment_card.dart';
 import 'package:patient/provider/assessment_provider.dart';
-import 'package:patient/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class AssessmentsListScreen extends StatefulWidget {

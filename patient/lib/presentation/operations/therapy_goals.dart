@@ -18,6 +18,7 @@ class TherapyGoalsScreenState extends State<TherapyGoalsScreen> {
   @override
   void initState() {
     super.initState();
+    // Refactor this code to use existing provider `allAssessment` instead of fetching data again
     // Future.microtask(() {
     //   Provider.of<AssessmentProvider>(context, listen: false)
     //       .fetchAssessmentBySelectedId();
