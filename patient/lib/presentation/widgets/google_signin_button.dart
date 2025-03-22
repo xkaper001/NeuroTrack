@@ -1,14 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:patient/presentation/auth/personal_details_screen.dart';
-import 'package:patient/provider/auth_provider.dart';
-import 'package:provider/provider.dart';
-
-import '../auth/personal_details_screen.dart';
-
 
 class GoogleSignInButton extends StatelessWidget {
-  const GoogleSignInButton({Key? key}) : super(key: key);
+  const GoogleSignInButton({
+    super.key,
+    required this.onPressed
+  });
+
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class GoogleSignInButton extends StatelessWidget {
         width: double.infinity,
         height: 50,
         child: ElevatedButton(
-          onPressed: () => _handleGoogleSignIn(context),
+          onPressed: () => onPressed(),
       
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
@@ -52,21 +51,5 @@ class GoogleSignInButton extends StatelessWidget {
         ),
       ),
     );
-  }
-
-
-
-Future<void> _handleGoogleSignIn(BuildContext context) async {
-  final authProvider = context.read<AuthProvider>(); // Store provider reference
-
-  try {
-    await authProvider.signInWithGoogle(); // Perform sign-in
-    final fullName = authProvider.getFullName();
-    // print(fullName);
-     // Fetch full name after sign-in
-  } catch (error) {
-    // Handle error (you can log it or handle it elsewhere)
-    print('Sign-in failed: $error');
-    }
   }
 }
