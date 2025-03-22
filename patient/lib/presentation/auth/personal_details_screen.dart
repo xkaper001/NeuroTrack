@@ -51,6 +51,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       }
 
       if(authProvider.apiStatus.isSuccess) {
+        SnackbarService.showSuccess('Personal Info saved successfully');
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const AssessmentsListScreen(),

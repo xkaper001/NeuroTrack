@@ -9,22 +9,19 @@ class AssessmentProvider with ChangeNotifier {
 
   String? _assessmentId;
   String? get assessmentId => _assessmentId;
-  List<AssessmentModel> _allAssessments = [];
 
+  List<AssessmentModel> _allAssessments = [];
   List<AssessmentModel> get allAssessments => _allAssessments;
 
   String _selectedAssesssmentId = '';
 
   AssessmentAnswerModel _assessmentAnswerModel = AssessmentAnswerModel(questions: [], assessmentId: '');
-
   AssessmentAnswerModel? get assessmentAnswerModel => _assessmentAnswerModel;
 
   ApiStatus _submitAssessmentStatus = ApiStatus.initial;  
-
   ApiStatus get submitAssessmentStatus => _submitAssessmentStatus;
 
   AssessmentResultModel? _assessmentResultModel;
-
   AssessmentResultModel? get assessmentResultModel => _assessmentResultModel;
 
 

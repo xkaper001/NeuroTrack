@@ -34,16 +34,14 @@ class AuthProvider extends ChangeNotifier {
   final AuthRepository _authRepository;
 
   ApiStatus _apiStatus = ApiStatus.initial;
-  String _apiErrorMessage = '';
-
-  String get apiErrorMessage => _apiErrorMessage;
-
   ApiStatus get apiStatus => _apiStatus;
+  
+  String _apiErrorMessage = '';
+  String get apiErrorMessage => _apiErrorMessage;
 
   final supabase = Supabase.instance.client;
 
   AuthNavigationStatus _authNavigationStatus = AuthNavigationStatus.unknown;
-
   AuthNavigationStatus get authNavigationStatus => _authNavigationStatus;
 
   Future<void> signInWithGoogle() async {
@@ -103,10 +101,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> checkIfPatientExists() async {
-    //final ActionResult result = await _authRepository.checkIfPatientExists();
+    final ActionResult result = await _authRepository.checkIfPatientExists();
     _authNavigationStatus = AuthNavigationStatus.unknown;
     notifyListeners();
-    final ActionResult result = ActionResultSuccess(data: false, statusCode: 200);
     if(result is ActionResultSuccess) {
       final bool patientExists = result.data as bool;
       if(patientExists) {
@@ -125,7 +122,6 @@ class AuthProvider extends ChangeNotifier {
     _apiErrorMessage = '';
     notifyListeners();
     final ActionResult result = await _authRepository.storePersonalInfo(personalInfoModel.toEntity());
-    // final ActionResult result = ActionResultSuccess(data: 'Personal information stored successfully', statusCode: 200);
     if(result is ActionResultSuccess) {
       _apiStatus = ApiStatus.success;
     } else {
